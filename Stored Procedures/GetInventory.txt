@@ -1,0 +1,74 @@
+USE [Devify]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GetInventory]    Script Date: 6/4/2022 6:06:23 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+Create         PROCEDURE [dbo].[GetInventory]
+@PageIndex int,
+@PageSize int ,
+@OrderBy nvarchar(50),
+@StoreId int,
+@MinimumQuantity int = Null,
+@Total int output,
+@TotalDisplay int output
+
+AS
+BEGIN
+    Declare @sql nvarchar(MAX);
+    Declare @countsql nvarchar(MAX);
+    Declare @paramList nvarchar(MAX);
+    Declare @countparamList nvarchar(MAX);
+   
+    SET NOCOUNT ON;
+
+    Select @Total = count(*) from Products;
+
+    SET @countsql = 'select @TotalDisplay = count(*) from Products inner join stores on stores.Id=products.StoreId
+left join InventoryAlerts on stores.Id=InventoryAlerts.storeId
+where 1 = 1 AND Products.StoreId = @xStoreId';
+   
+    IF @MinimumQuantity IS NOT NULL
+    SET @countsql = @countsql + ' AND Quantity <@xMinimumQuantity'
+   
+    SET @sql = 'select products.Id, products.Name,products.saleprice,products.brand,products.ExpireDate,products.Quantity
+    from Products inner join stores on stores.Id=products.StoreId
+left join InventoryAlerts on stores.Id=InventoryAlerts.storeId
+where 1 = 1 AND Products.StoreId = @xStoreId';
+   
+    IF @MinimumQuantity IS NOT NULL
+    SET @sql = @sql + ' AND Quantity <(@xMinimumQuantity)'
+   
+
+    SET @sql = @sql + ' Order by '+@OrderBy+' OFFSET @PageSize * (@PageIndex - 1)
+    ROWS FETCH NEXT @PageSize ROWS ONLY';
+   
+    SELECT @countparamlist = '@xMinimumQuantity int,
+        @xStoreId int,
+        @TotalDisplay int output';
+
+    exec sp_executesql @countsql , @countparamlist,
+        @MinimumQuantity,
+        @StoreId,
+        @TotalDisplay = @TotalDisplay output;
+
+    SELECT @paramlist = '@xMinimumQuantity int,
+        @xStoreId int,
+        @PageIndex int,
+        @PageSize int';
+
+    exec sp_executesql @sql , @paramlist ,
+        @MinimumQuantity,
+        @StoreId,
+        @PageIndex,
+        @PageSize;    
+
+END
+GO
+
+

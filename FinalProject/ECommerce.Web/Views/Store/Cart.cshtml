@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@model ShoppingCartModel
+<section class="padding-y bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title mb-4">Shopping cart</h5>
+                        @foreach (var cartItem in @Model!._cartItemsModel)
+                        {
+                            <article class="row gy-3  mb-4">
+                                <div class="col-lg-6">
+                                    <figure class="itemside  me-lg-5">
+                                        <div class="aside"><img src="@string.Format("{0}{1}", @Model.ImageUrl, @cartItem.Product!.ProductImages[0].Url)" class="img-sm border rounded"></div>
+                                        <figcaption class="info">
+                                            <a asp-controller="store" asp-action="ProductDetails" asp-route-id="@cartItem.Product.Id" class="title mb-1">@string.Format("{0} {1} ({2})", @cartItem.Product!.Name, @cartItem.Product!.Model, @cartItem.Product!.Size)</a>
+                                            <p class="text-muted small"> @*Color: Black,*@Brand: @cartItem.Product!.Brand  </p>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group input-spinner">
+                                        <button onclick="onQuantity(@cartItem.ProductId, @cartItem.Quantity-1)" class="btn btn-light" type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24">
+                                                <path d="M19 13H5v-2h14v2z"></path>
+                                            </svg>
+                                        </button>
+                                        <input id="qtyText" type="text" class="form-control" onchange="onQuantity(@cartItem.ProductId, this.value)" value="@cartItem.Quantity">
+                                        <button onclick="onQuantity(@cartItem.ProductId, @cartItem.Quantity+1)" class="btn btn-light" type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24"> <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>  </svg>
+                                        </button>
+                                    </div> <!-- input-group.// -->
+                            </div>
+                                <div class="col-lg-2 col-sm-4 col-6">
+                                    <div class="price-wrap lh-sm">
+                                        <var class="price h6">@cartItem.TotalPrice.ToString("C", CultureInfo.CurrentCulture)</var>  <br>
+                                        <small class="text-muted"> @cartItem.Product.SalePrice.ToString("C", CultureInfo.CurrentCulture) / per item </small>
+                                    </div> <!-- price-wrap .// -->
+                            </div>
+                                <div class="col-lg col-sm-4">
+                                    <div class="float-lg-end">
+                                        <a onclick="onQuantity(@cartItem.ProductId, 0)" class="btn btn-light text-danger"> Remove</a>
+                                    </div>
+                                </div>
+                            </article> <!-- row.// -->
+                        }
+                    </div> <!-- card-body .// -->
+
+                    <div class="card-body border-top">
+                        <p class="mb-0"><i class="me-2 text-success fa fa-truck"></i> Free Delivery within 1-2 weeks</p>
+                    </div> <!-- card-body.// -->
+
+                </div> <!-- card.// -->
+
+            </div> <!-- col.// -->
+            <aside class="col-lg-3">
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @*<form asp-action="coupon" method="post" asp-antiforgery=true>*@
+                        <label class="form-label">Have coupon?</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="" placeholder="Coupon code">
+                            <button class="btn btn-light" onclick="toastr.error('Invalid coupon code!');">Apply</button>
+                        </div>
+                        @*</form>*@
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="dlist-align">
+                            <dt>Total price:</dt>
+                            <dd class="text-end"> @Model.TotalPrice().ToString("C", CultureInfo.CurrentCulture)</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Discount:</dt>
+                            <dd class="text-end text-success"> - @Model.TotalDiscount().ToString("C", CultureInfo.CurrentCulture) </dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>TAX:</dt>
+                            <dd class="text-end text-danger"> + $0.00 </dd>
+                        </dl>
+                        <hr>
+                        <dl class="dlist-align">
+                            <dt>Total:</dt>
+                            <dd class="text-end text-dark h5"> @string.Format("{0}", (@Model.TotalPrice()-@Model.TotalDiscount()).ToString("C", CultureInfo.CurrentCulture)) </dd>
+                        </dl>
+                        <form asp-action="Order" method="post" asp-antiforgery="true">
+
+                            <input id="totalAmount" hidden asp-for="TotalAmount" value="@Model.TotalPrice()" />
+                            <input id="discountTotal" hidden asp-for="DiscountTotal" value="@Model.TotalDiscount()" />
+                            <input id="discountTotal" hidden asp-for="TotalCostAmount" value="@Model.TotalCostPrice()" />
+                            <input id="storeId" hidden asp-for="StoreId" value="@Model.StoreId"/>
+                            <div class="d-grid gap-2 my-3">
+                                <button type="submit" class="btn btn-primary w-100"> Make Purchase </button>
+                                <a asp-action="index" class="btn btn-light w-100"> Back to shop </a>
+                            </div>
+                        </form>
+
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+
+            </aside> <!-- col.// -->
+
+        </div> <!-- row.// -->
+    </div> <!-- container .//  -->
+</section>
+<script>
+function onQuantity(id, qty) {
+  window.location.href='/store/editcart/'+id+'?qty='+qty;
+}
+
+</script>
+
+

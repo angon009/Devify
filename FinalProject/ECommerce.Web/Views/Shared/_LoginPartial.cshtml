@@ -1,0 +1,104 @@
+﻿@using ECommerce.Utility
+@using Microsoft.AspNetCore.Identity
+@using ECommerce.Core.Entities.Users
+@using ECommerce.Membership.Repositories
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IAccountRepository _accountRepo
+@{
+    var user = new ApplicationUser();
+    var count = 0;
+    if (_accountRepo.IsAuthenticated())
+        user = await _accountRepo.GetCurrentUserAsync();
+
+    @if (TempData.Peek<IList<CartItemModel>>("CartSession") != null)
+    {
+        count = TempData.Peek<IList<CartItemModel>>("CartSession").Count;
+    }
+}
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="widget-header  mx-2">
+        <a href="#" class="widget-icontop"
+       data-bs-toggle="dropdown"
+       data-bs-display="static"
+       aria-expanded="false">
+            <div class="icon-area">
+                <i class="fa fa-user"></i>
+            </div>
+            <small class="text"> @user.FirstName </small>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end">
+            <!-- user details button -->
+             <li>
+                <a class="dropdown-item d-flex align-items-center pb-2">
+                    <span class="btn-user-name1 fs-6">
+                        <img class="rounded-circle" src=@string.Format("{0}{1}","/Profile/images/people/",(user.Image!=null)?user.Image:"avatar.jpg") width="40" height="40">
+                    </span>
+                    <div class="ms-2">
+                        <h6 class="user-name m-0">@string.Format("{0} {1}", user.FirstName, user.LastName)</h6>
+                        <p class="user-email m-0">@user.Email</p>
+                    </div>
+                </a>
+            </li>
+            <!-- manage account -->
+            <li>
+                <a asp-action="Index" asp-controller="Manage" asp-area="Profile" class="dropdown-item" type="button">
+                    <div class="d-flex align-items-center account-option">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="ms-3">Manage Account</span>
+                    </div>
+                </a>
+            </li>
+            <!-- Log out button -->
+        <li>
+                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout"
+                  asp-route-returnUrl="@Url.Action("Logout", "Account", new { area = "" })">
+                    <button type="submit" class="dropdown-item fs-6">
+                        <div class="d-flex align-items-center account-option">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span class="ms-3">Log out</span>
+                        </div>
+                    </button>
+                </form>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget-header mx-2">
+        <a asp-action="Index" asp-controller="Message" asp-area="Vendor" class="widget-icontop">
+            <div class="icon-area">
+                <i class="fa fa-comment-dots"></i>
+                <span class="notify">1</span>
+            </div>
+            <small class="text"> Message </small>
+        </a>
+    </div>
+    <div class="widget-header mx-2">
+        <a href="#" class="widget-icontop">
+            <div class="icon-area">
+                <i class="fa fa-heart"></i>
+            </div>
+            <small class="text"> Saved </small>
+        </a>
+    </div>
+    <div class="widget-header mx-2">
+        <a asp-action="Cart" asp-controller="Store" asp-area="" class="widget-icontop">
+            <div class="icon-area">
+                <i class="fa fa-shopping-cart"></i>
+            </div>
+            <small id="cartCount" class="text"> Cart (@count) </small>
+        </a>
+    </div>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login" asp-area="" class="ms-md-2 btn btn-light"> <i class="fa me-1 fa-user"></i>  Sign in</a>
+
+    <a asp-action="Cart" asp-controller="Store" class="ms-md-2 btn btn-primary">
+        <i id="cartCount" class="fa me-1 fa-shopping-cart">Cart (@count)</i>
+    </a>
+
+}
+
+

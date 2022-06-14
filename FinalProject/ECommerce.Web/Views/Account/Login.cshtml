@@ -1,0 +1,80 @@
+﻿@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="p-2 bg-light" style="min-height:90vh">
+<div class="container">
+<!-- ====== COMPONENT LOGIN  ====== -->
+<div class="card shadow mx-auto" style="max-width:400px; margin-top:40px;">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="mb-4">Sign in</h4>
+            <form id="account" method="post" asp-action="Login" asp-controller="Account" asp-area="">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="username" aria-required="true" />
+                </div> <!-- input-group end.// -->
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    <input asp-for="Password" class="form-control" placeholder="Password" autocomplete="current-password" aria-required="true" />
+                </div> <!-- input-group end.// -->
+
+                <div class="d-flex mb-3">
+                    <label class="form-check me-auto">
+                        <input class="form-check-input" asp-for="RememberMe" />
+                        <span class="form-check-label"> Remember </span>
+                    </label>
+                    <a asp-action="ForgotPassword" class="text-decoration-none">Forgot password</a>
+                </div> <!-- col end.// -->
+
+                <button class="btn btn-primary w-100" type="submit"> Sign in </button>            
+
+            </form> <!-- form end.// -->
+            <p class="text-divider my-4">or access via</p>
+                
+            @{
+                if ((Model!.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" asp-antiforgery="true">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" form="external-account" name="provider" class = "btn btn-light w-100 mb-2" value="@provider.Name">
+                                         <img src="~/Theme/images/icons/social/@string.Format("{0}.svg",provider.DisplayName!)" height="20" width="20"> 
+                                        <span class="ms-1 align-middle">Continue with @provider.DisplayName</span>
+                                    </button>
+                                    //<button type="submit" form="external-account" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            } 
+            <p class="mb-0 mt-4 text-center">Don’t have an account? <a asp-action="Register">Sign Up</a></p>
+        </div> <!-- card-body end.// -->
+    </div> <!-- card end.// -->
+</div>
+<!-- ====== COMPONENT LOGIN  END.// ====== -->
+<br /><br />
+</div> <!-- container .//  -->
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,229 @@
+﻿@model ProductUpdateViewModel
+@{
+    ViewData["Title"] = "Update Product";
+    ViewData["PageNav"] = "Update Product";
+}
+
+<form asp-action="update" asp-controller="Product" asp-area="Vendor" enctype="multipart/form-data" method="post" asp-antiforgery="true">
+    <section class="contentt-main" style="max-width:1200px">
+        <div class="row mb-4">
+            <div class="col-xl-8 col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label">Product Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" asp-for="Name">
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Model" class="form-label">Model Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" asp-for="Model">
+                            <span class="text-danger" asp-validation-for="Model"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="Brand" class="form-label">Brand Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" asp-for="Brand">
+                            <span class="text-danger" asp-validation-for="Brand"></span>
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-md-4  mb-3">
+                                <label asp-for="Color" class="form-label">Color</label>
+                                <input asp-for="Color" placeholder="Type here" class="form-control" id="Color">
+                                <span class="text-danger" asp-validation-for="Color"></span>
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label asp-for="Weight" class="form-label">Weight</label>
+                                <input type="text" placeholder="Type here" class="form-control" asp-for="Weight">
+                                <span class="text-danger" asp-validation-for="Weight"></span>
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label asp-for="Size" class="form-label">Size</label>
+                                <input type="text" placeholder="Type here" class="form-control" asp-for="Size">
+                                <span class="text-danger" asp-validation-for="Size"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label asp-for="ProductDetails" class="form-label">Product Details</label>
+                            <textarea asp-for="ProductDetails" placeholder="Type here" class="form-control" rows="4"></textarea>
+                            <span class="text-danger" asp-validation-for="ProductDetails"></span>
+                        </div>
+                    </div>
+                </div> <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label asp-for="Images" class="form-label">Images</label>
+                            <input name="Images" id="fileupload" type="file" multiple="multiple" class="form-control">
+                            <b>Live Preview</b>
+                            <br />
+                            <br />
+                            <div id="dvPreview">
+                                @{
+                                    if (Model.ProductImages != null)
+                                    {
+                                        if (Model.ProductImages.Count > 0)
+                                        {
+                                            foreach (var image in Model.ProductImages)
+                                            {
+                                                <img src="/Images/Stores/@image.Url" width="100" height="100" />
+                                            }
+                                        }
+                                    }
+
+                                }
+                            </div>
+
+                            <span class="text-danger" asp-validation-for="Images"></span>
+                        </div>
+                    </div>
+                </div> <!-- card end// -->
+            </div> <!-- col end// -->
+            <aside class="col-xl-4 col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label asp-for="SalePrice" class="form-label">Sale Price</label>
+                            <div class="row gx-2">
+                                <div class="col-4">
+                                    <input class="form-control" asp-for="SalePrice">
+                                    <span class="text-danger" asp-validation-for="SalePrice"></span>
+                                </div>
+                            </div> <!-- row.// -->
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="CostPrice" class="form-label">Cost Price</label>
+                            <div class="row gx-2">
+                                <div class="col-4">
+                                    <input class="form-control" asp-for="CostPrice">
+                                    <span class="text-danger" asp-validation-for="CostPrice"></span>
+                                </div>
+                            </div> <!-- row.// -->
+                        </div>
+                         <div class="mb-4">
+                            <label asp-for="Quantity" class="form-label">Quantity</label>
+                            <div class="row gx-2">
+                                <div class="col-4">
+                                    <input class="form-control" asp-for="Quantity" min="0">
+                                    <span class="text-danger" asp-validation-for="Quantity"></span>
+                                </div>
+                            </div> <!-- row.// -->
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <label asp-for="DiscountId" class="form-label">Select Discount</label>
+                            <select asp-for="DiscountId" class="form-control" id="discountId"
+                                    asp-items="@(new SelectList(Model.discountList,"Id","DiscountName"))">
+                                    <option value="" selected>Choose an item</option>
+                                </select>
+                            <span class="text-danger" asp-validation-for="DiscountId"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="CategoryId" class="form-label">Category</label>
+                            <select asp-for="CategoryId" class="form-control" id="categoryId"
+                                    asp-items="@(new SelectList(Model.categoryList,"Id","CategoryName"))">
+                                    <option value="" selected>Choose an item</option>
+                                    
+                                </select>
+                            <span class="text-danger" asp-validation-for="CategoryId"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="SubCategoryId" class="form-label">Sub-Category</label>
+                            <select asp-for="SubCategoryId" class="form-control" id="subCategoryId"></select>
+                            <span class="text-danger" asp-validation-for="SubCategoryId"></span>
+                        </div>
+                        <hr>
+                        <div class="mb-4">
+                            <label asp-for="ManufactureDate" class=" form-label">Manufacture Date</label>
+                            <div class="form-label">
+                                <input type="date" class="form-control" asp-for="ManufactureDate" />
+                                <span class="text-danger" asp-validation-for="ManufactureDate"></span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="ExpireDate" class=" form-label">Expire Date</label>
+                            <div class="form-label">
+                                <input type="date" class="form-control" asp-for="ExpireDate" />
+                                <span class="text-danger" asp-validation-for="ExpireDate"></span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-footer">
+                            <h3 class="text-center">
+                                <input type="submit" value="Update Product" class="btn btn-primary rounded" />
+                            </h3>
+                        </div>
+                    </div>
+
+                </div>
+            </aside> <!-- col end// -->
+        </div> <!-- row end// -->
+    </section> <!-- content-main end// -->
+</form>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            getSubCategoryListByCategoryId();
+        })
+        $("#categoryId").change(function() {
+            getSubCategoryListByCategoryId();
+        });
+        var getSubCategoryListByCategoryId = function() {
+            $.ajax({
+                url: '@Url.Action("GetSubCategoryByCategoryId","Product")',
+                type: 'GET',
+                data: {
+                    categoryId: $('#categoryId').val(),
+                },
+                success: function(data) {
+                    $('#subCategoryId').find('option').remove()
+                    $(data).each(
+                        function(index, item) {
+                            $('#subCategoryId').append('<option value="' + item.id + '">' + item.subCategoryName + '</option>')
+                            console.log(item);
+                        });
+                },
+                error: function() {
+                }
+            });
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        window.onload = function() {
+            var fileUpload = document.getElementById("fileupload");
+            fileUpload.onchange = function() {
+                if (typeof (FileReader) != "undefined") {
+                    var dvPreview = document.getElementById("dvPreview");
+                    dvPreview.innerHTML = "";
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                    for (var i = 0; i < fileUpload.files.length; i++) {
+                        var file = fileUpload.files[i];
+                        if (regex.test(file.name.toLowerCase())) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                var img = document.createElement("IMG");
+                                img.height = "100";
+                                img.width = "100";
+                                img.src = e.target.result;
+                                dvPreview.appendChild(img);
+                            }
+                            reader.readAsDataURL(file);
+                        } else {
+                            alert(file.name + " is not a valid image file.");
+                            dvPreview.innerHTML = "";
+                            return false;
+                        }
+                    }
+                } else {
+                    alert("This browser does not support HTML5 FileReader.");
+                }
+            }
+        };
+    </script>
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+
+}

@@ -1,0 +1,280 @@
+﻿@using System.Globalization
+@model StoreModel
+@{
+    ViewData["Title"] = "Store";
+}
+@section Styles
+    {
+
+}
+    <!--Banner Secction-->
+
+ <section class="section-intro padding-top-sm">
+    <div class="container">
+        <main class="card p-3">
+            <div class="row">
+                <aside class="col-lg-3">
+                    <nav class="nav flex-column nav-pills">
+                        <div class="card-body">
+                            <ul class="list-menu">
+                                @{
+                                    if (ViewBag.Categories != null)
+                                    {
+
+                                        int count = 0;
+                                        foreach (var category in ViewBag.Categories)
+                                        {
+                                            count++;
+                                            if (count > 10)
+                                                break;
+                                            <li>
+                                                <a asp-controller="store" asp-action="products" asp-route-CategoryId="@category.Id" class="d-inline fw-bold">@category.CategoryName</a>
+                                            </li>
+                                        }
+
+                                    }
+                                }
+                            </ul>
+                        </div> <!-- card-body.// -->
+                    </nav>
+                </aside>
+                <div class="col-lg-9">
+                    <article class="card-banner p-5 bg-primary" style="height: 360px">
+                        <div style="max-width: 500px">
+                            <h2 class="text-white">Great products with <br> best deals </h2>
+                            <p class="text-white">No matter how far along you are in your sophistication as an amateur astronomer, there is always one.</p>
+                            <a href="#" class="btn btn-warning"> View more </a>
+                        </div>
+                        <img src="~/Theme/images/banners/banner-item2.jpg" height="350" class="img-bg">
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div> <!-- container end.// -->
+</section>
+<!--./End of Banner Section-->
+<!--New Product Section-->
+<section class="bg-light padding-y">
+    <div class="container">
+
+        <header class="section-heading">
+            <h3 class="section-title">New products</h3>
+        </header>
+
+        <div class="row">
+
+            @{
+                int i = 0;
+                foreach (var item in @ViewBag.Products)
+                {
+                    if (i >= 7)
+                    {
+                        break;
+                    }
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <figure class="card card-product-grid">
+                            <div class="img-wrap">
+                                @if (item.ProductImages.Count != 0)
+                                {
+                                    <img src="@Model.ProductImageUrl@item.ProductImages[0].Url">
+                                }
+                                else
+                                {
+                                    <img src="" alt="No image">
+                                }
+
+                            </div>
+                            <figcaption class="info-wrap border-top">
+                                <div class="price-wrap">
+                                    @if (@item.Discount == null)
+                                    {
+                                        <span class="price"> @item.SalePrice.ToString("C", CultureInfo.CurrentCulture) </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price"> @string.Format("{0}",(item.SalePrice-((item.SalePrice*item.Discount.Percentage)/100)).ToString("C", CultureInfo.CurrentCulture)) </span>
+                                        <del class="price-old"> @item.SalePrice.ToString("C", CultureInfo.CurrentCulture)</del>
+                                    }
+
+                                </div> <!-- price-wrap.// -->
+                                <a asp-controller="store" asp-action="ProductDetails" asp-route-id="@item.Id">
+                                    <p class="title mb-2">@item.Brand, @item.Name @item.Model</p>
+                                </a>
+                                <input id="discountId" hidden value="@item.DiscountId" />
+
+                                <a id="addToCart" onclick="AddToCart(@item.Id)" class="btn btn-primary">Add to cart</a>
+                                <a href="#" class="btn btn-light btn-icon"> <i class="fa fa-heart"></i> </a>
+                            </figcaption>
+                        </figure>
+                    </div>
+                }
+            }
+        </div> <!-- row end.// -->
+        <div class="row d-flex justify-content-center text-center">
+            <a asp-controller="Store" asp-action="Products" class="btn btn-light">
+                <!--Store ID Must be added-->
+                <i class="fa fa-reorder"></i>  <span class="ms-1 d-none d-sm-inline-block">See More</span>
+            </a>
+        </div>
+    </div> <!-- container end.// -->
+</section>
+<!--./End of New Product Section-->
+<!--Why Choose Us Section-->
+<section class="padding-top">
+    <div class="container">
+        <div class="row gy-4">
+            <aside class="col-lg-6">
+                <article class="card-banner bg-gray h-100" style="min-height: 200px">
+                    <div class="p-3 p-lg-5" style="max-width:70%">
+                        <h3> Best products &amp; brands in our store at 80% off</h3>
+                        <p>That's true but not always</p>
+                        <a class="btn btn-warning" href="#"> Claim offer </a>
+                    </div>
+                    <img src="~/Theme/images/banners/intro-item2.jpg" height="350" class="img-bg">
+                </article>
+            </aside> <!-- col.// -->
+            <aside class="col-lg-6">
+
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <article class="card bg-primary" style="min-height: 200px">
+                            <div class="card-body">
+                                <h5 class="text-white">Gaming toolset</h5>
+                                <p class="text-white-50">Technology for cyber sport  </p>
+                                <a class="btn btn-outline-light btn-sm" href="#">Learn more</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-6">
+                        <article class="card bg-primary" style="min-height: 200px">
+                            <div class="card-body">
+                                <h5 class="text-white">Quality sound</h5>
+                                <p class="text-white-50">All you need for music</p>
+                                <a class="btn btn-outline-light btn-sm" href="#">Learn more</a>
+                            </div>
+                        </article>
+                    </div>
+                </div> <!-- row.// -->
+
+                <article class="card bg-success" style="min-height: 200px">
+                    <div class="card-body">
+                        <h5 class="text-white">Buy 2 items, With special gift</h5>
+                        <p class="text-white-50" style="max-width:400px;">Buy one, get one free marketing strategy helps your business improves the brand by sharing the profits </p>
+                        <a class="btn btn-outline-light btn-sm" href="#">Learn more</a>
+                    </div>
+                </article>
+
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+    </div> <!-- container end.// -->
+</section>
+<!--./End of Why Choose Us Section-->
+<!--Block Post Section-->
+<section class="padding-top">
+    <div class="container">
+
+        <header class="section-heading">
+            <h3 class="section-title">Recently viewed</h3>
+        </header>
+
+        <div class="row gy-3">
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/11.jpg">
+                </a>
+            </div> <!-- col.// -->
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/4.jpg">
+                </a>
+            </div> <!-- col.// -->
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/9.jpg">
+                </a>
+            </div> <!-- col.// -->
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/13.jpg">
+                </a>
+            </div> <!-- col.// -->
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/10.jpg">
+                </a>
+            </div> <!-- col.// -->
+            <div class="col-lg-2 col-md-4 col-4">
+                <a href="#" class="img-wrap">
+                    <img height="200" width="200" class="img-thumbnail" src="~/Theme/Images/items/7.jpg">
+                </a>
+            </div> <!-- col.// -->
+        </div> <!-- row end.// -->
+
+    </div> <!-- container end.// -->
+</section>
+<!--./End of Blog Post Section-->
+<!--What we provide-->
+<section class="padding-y">
+    <div class="container">
+        <article class="card p-3 p-lg-5">
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <figure class="icontext">
+                        <div class="icon">
+                            <span class="icon-sm bg-warning-light text-warning rounded">
+                                <i class="fa fa-thumbs-up"></i>
+                            </span>
+                        </div>
+                        <figcaption class="text">
+                            <h6 class="title">Reasonable prices</h6>
+                            <p>Have you ever finally just  </p>
+                        </figcaption>
+                    </figure> <!-- icontext // -->
+                </div><!-- col // -->
+                <div class="col-lg-3 col-md-6">
+                    <figure class="icontext">
+                        <div class="icon">
+                            <span class="icon-sm bg-warning-light text-warning rounded">
+                                <i class="fa fa-plane"></i>
+                            </span>
+                        </div>
+                        <figcaption class="text">
+                            <h6 class="title">Worldwide shipping</h6>
+                            <p>Have you ever finally just  </p>
+                        </figcaption>
+                    </figure> <!-- icontext // -->
+                </div><!-- col // -->
+                <div class="col-lg-3 col-md-6">
+                    <figure class="icontext">
+                        <div class="icon">
+                            <span class="icon-sm bg-warning-light text-warning rounded">
+                                <i class="fa fa-star"></i>
+                            </span>
+                        </div>
+                        <figcaption class="text">
+                            <h6 class="title">Best ratings</h6>
+                            <p>Have you ever finally just  </p>
+                        </figcaption>
+                    </figure> <!-- icontext // -->
+                </div> <!-- col // -->
+                <div class="col-lg-3 col-md-6">
+                    <figure class="icontext">
+                        <div class="icon">
+                            <span class="icon-sm bg-warning-light text-warning rounded">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </div>
+                        <figcaption class="text">
+                            <h6 class="title">Help center</h6>
+                            <p>Have you ever finally just  </p>
+                        </figcaption>
+                    </figure> <!-- icontext // -->
+                </div> <!-- col // -->
+            </div> <!-- row // -->
+        </article>
+    </div><!-- //container -->
+</section>
+<!--./End of Blog Post Section-->
+
+<partial name="_AddToCartScriptsPartial" />
+

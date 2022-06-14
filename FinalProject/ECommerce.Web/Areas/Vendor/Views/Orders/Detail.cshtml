@@ -1,0 +1,200 @@
+﻿@using ECommerce.Web.Areas.Vendor.Models.OrdersModels
+@using ECommerce.Utility;
+@model OrderListViewModel
+@inject IAccountRepository _accountRepo
+@{
+    var user = new ApplicationUser();
+
+    ViewData["Title"] = "Detail";
+    if (_accountRepo.IsAuthenticated())
+        user = await _accountRepo.GetCurrentUserAsync();
+}
+
+<div class="card">
+    <header class="card-header">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <span>
+                    <i class="material-icons md-calendar_today"></i> <b>@Model.OrderDetail.OrderDate.CurrentZone(user.TimeZone!).ToString("MM/dd/yyyy hh:mm tt")</b>
+                </span> <br>
+                <small class="text-muted">Order ID: @Model.OrderDetail.Id</small>
+            </div>
+            @if (string.IsNullOrEmpty(Model.From))
+            {
+                <form asp-action="Detail" asp-controller="Orders" method="post" asp-antiforgery=true>
+                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        <select asp-for="OrderStatusId" class="form-select d-inline-block" style="max-width: 200px">
+                            @if (Model.OrderDetail.OrderStatusId == 1)
+                            {
+                                <option selected value="1">Pending</option>
+                                <option value="2">Ondelivery</option>
+                                <option value="3">Delivered</option>
+                                <option value="4">Cancelled</option>
+                            }
+                            else if (Model.OrderDetail.OrderStatusId == 2)
+                            {
+                                <option value="1">Pending</option>
+                                <option selected value="2">Ondelivery</option>
+                                <option value="3">Delivered</option>
+                                <option value="4">Cancelled</option>
+                            }
+                            else if (Model.OrderDetail.OrderStatusId == 3)
+                            {
+                                <option value="1">Pending</option>
+                                <option value="2">Ondelivery</option>
+                                <option selected value="3">Delivered</option>
+                                <option value="4">Cancelled</option>
+                            }
+                            else if (Model.OrderDetail.OrderStatusId == 4)
+                            {
+                                <option value="1">Pending</option>
+                                <option value="2">Ondelivery</option>
+                                <option value="3">Delivered</option>
+                                <option selected value="4">Cancelled</option>
+                            }
+
+                        </select>
+                        <input hidden asp-for="OrderId" value="@Model.OrderDetail.Id" />
+                        <button class="btn btn-light" type="submit">Save</button>
+                        <a asp-action="index" asp-controller="Orders" class="btn btn-primary ms-2">Back</a>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                    <a asp-action="GetSales" asp-controller="Sales" class="btn btn-primary ms-2">Back</a>
+                </div>
+            }
+        </div>
+    </header> <!-- card-header end// -->
+    <div class="card-body">
+
+        <div class="row mb-5 order-info-wrap">
+            <div class="col-md-4">
+                <article class="icontext align-items-start">
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-person"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1">Customer</h6>
+                        <p class="mb-1">
+                            @string.Format("{0} {1}",@Model.OrderDetail.ApplicationUser.FirstName, @Model.OrderDetail.ApplicationUser.LastName) <br> @Model.OrderDetail.ApplicationUser.Email <br> +@Model.OrderDetail.ApplicationUser.PhoneNumber
+                        </p>
+                        @*<a href="#">View profile</a>*@
+                    </div>
+                </article>
+            </div> <!-- col// -->
+            <div class="col-md-4">
+                <article class="icontext align-items-start">
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-local_shipping"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1">Order info</h6>
+                        <p class="mb-1">
+                            Shipping: Fargo express <br> Pay method: card <br> Status: new
+                        </p>
+                        @*<a href="#">Download info</a>*@
+                    </div>
+                </article>
+            </div> <!-- col// -->
+            <div class="col-md-4">
+                <article class="icontext align-items-start">
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-place"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1">Deliver to</h6>
+                        @foreach (var address in Model.OrderDetail.ApplicationUser.Address)
+                        {
+                            <p class="mb-1">
+                                City: @address.Division, @address.District <br>@address.Thana, @address.RoadNumber <br> Po Box 10000
+                            </p>
+                        }
+
+                        @*<a href="#">View profile</a>*@
+                    </div>
+                </article>
+            </div> <!-- col// -->
+        </div> <!-- row // -->
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="table-responsive">
+                    <table class="table border table-hover table-lg">
+                        <thead>
+                            <tr>
+                                <th width="40%">Product</th>
+                                <th width="20%">Unit Price</th>
+                                <th width="20%">Quantity</th>
+                                <th width="20%" class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in Model.OrderDetail.OrderDetails)
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                <img src="@string.Format("{0}{1}",Model.ImageUrl, detail.Product.ProductImages[0].Url)" width="40" height="40" class="img-xs" alt="Item">
+                                            </div>
+                                            <div class="info"> @detail.Product.Name, @detail.Product.Size size   </div>
+                                        </a>
+                                    </td>
+                                    <td> $@detail.Product.SalePrice </td>
+                                    <td> @detail.Quantity </td>
+                                    <td class="text-end">  $@string.Format("{0}", detail.Quantity*detail.Product.SalePrice)  </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4">
+                                    <article class="float-end">
+                                        <dl class="dlist">
+                                            <dt>Subtotal:</dt>
+                                            <dd>$@Model.OrderDetail.TotalAmount</dd>
+                                        </dl>
+                                        <dl class="dlist">
+                                            <dt>Discount:</dt>
+                                            <dd>-$@Model.OrderDetail.DiscountTotal</dd>
+                                        </dl>
+                                        <dl class="dlist">
+                                            <dt>TAX:</dt>
+                                            <dd>+$0.00</dd>
+                                        </dl>
+                                        <dl class="dlist">
+                                            <dt>Shipping cost:</dt>
+                                            <dd>+$0.00</dd>
+                                        </dl>
+                                        <dl class="dlist">
+                                            <dt>Grand total:</dt>
+                                            <dd> <b class="h5">$@string.Format("{0}", @Model.OrderDetail.TotalAmount-@Model.OrderDetail.DiscountTotal)</b> </dd>
+                                        </dl>
+                                        <dl class="dlist">
+                                            <dt class="text-muted">Status:</dt>
+                                            <dd>
+                                                <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                                            </dd>
+                                        </dl>
+                                    </article>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- table-responsive// -->
+            </div>  <!-- col// -->
+            <div class="col-lg-4">
+                <div class="box shadow-sm bg-light">
+                    <h6>Payment info</h6>
+                    <p>
+                        <img src="~/images/2.png" class="border" height="20"> Master Card **** **** 4768  <br>
+                        Business name: Grand Market LLC <br>
+                        Phone: +1 (800) 555-154-52
+                    </p>
+                </div>
+            </div> <!-- col// -->
+
+        </div>
+    </div> <!-- card-body end// -->
+</div> <!-- card end// -->

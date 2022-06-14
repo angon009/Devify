@@ -1,0 +1,30 @@
+﻿<script>
+    $(function() {
+           $ ("#logout_link").on('click', function(e) {
+               e .preventDefault();
+               $ ("#submit:hidden").trigger('click');
+           } );
+       } );
+
+    window.onload = function ActiveMenu(){
+        var menuName = document.getElementById("menuComponent").value;
+        var menuComponent = document.getElementById(menuName);
+
+        switch(menuName)
+        {
+            case "indexPage":
+                menuComponent.classList.add('active');
+                break;
+            case "settingPage":
+                menuComponent.classList.add('active');
+                break;
+            case "wishlistPage":
+                menuComponent.classList.add('active');
+                break;
+            case "orderPage":
+                menuComponent.classList.add('active');
+                break;
+        }
+
+    }
+</script>

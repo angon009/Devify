@@ -1,0 +1,73 @@
+﻿@model StoreDetailsViewModel
+@{
+    ViewData["Title"] = "Store";
+    ViewData["PageNav"] = "Store Details";
+}
+<div class="card mb-4">
+    <div class="card-header bg-warning" style="height:150px">
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl col-lg flex-grow-0" style="flex-basis:230px">
+                <div class="img-thumbnail shadow w-100 bg-white position-relative text-center" style="height:190px; width:200px; margin-top:-120px">
+                    @if (Model.LogoUrl == null)
+                    {
+                        <img src="~/storeadmintheme/images/brands/brand.jpg" class="center-xy img-fluid" alt="Logo Brand">
+                    }
+                    else
+                    {
+                        <img src="~/images/stores/@Model.LogoUrl" class="center-xy img-fluid" alt="Logo Brand">
+                    }
+                </div>
+            </div> <!--  col.// -->
+            <div class="col-xl col-lg">
+                <h3>@Model.StoreName</h3>
+                <p>@Model.RoadNo, @Model.Thana, @Model.District, @Model.Division</p>
+            </div> <!--  col.// -->
+            <div class="col-xl-4 text-md-end"> 
+                @if(Model.StoreStatusId == 1)
+                {
+                    <a href="#" class="btn btn-primary float-end">ACTIVE<i class="material-icons md-launch"></i> </a>
+                }
+                else if(Model.StoreStatusId == 3)
+                {
+                    <a href="#" class="btn btn-primary float-end">ON DELETE<i class="material-icons md-launch"></i> </a>
+                }
+                else
+                {
+                    <a href="#" class="btn btn-primary float-end">INACTIVE<i class="material-icons md-launch"></i> </a>
+                }
+
+            </div>
+        </div> <!-- card-body.// -->
+        <hr class="my-4">
+        <div class="row g-4">
+            <div class="col-md-12 col-lg-4 col-xl-2">
+                <article class="box">
+                    <p class="mb-0 text-muted">Total sales:</p>
+                    <h5 class="text-success">238</h5>
+                    <p class="mb-0 text-muted">Revenue:</p>
+                    <h5 class="text-success mb-0">$2380</h5>
+                </article>
+            </div> <!--  col.// -->
+            <div class="col-sm-6 col-lg-4 col-xl-3">
+                <h6>Contacts</h6>
+                <p>
+                    @Model.Email<br>
+                    @Model.Phone
+                </p>
+            </div> <!--  col.// -->
+            <div class="col-sm-6 col-lg-4 col-xl-3">
+                <h6>Address</h6>
+                <p>
+                    Country: Bangladesh<br>
+                    Address: @Model.RoadNo, @Model.Thana @Model.District, @Model.Division<br>
+                    Postal code: @Model.post
+                </p>
+            </div> <!--  col.// -->
+            <div class="col-sm-6 col-xl-4 text-xl-end">
+                <img src="~/StoreAdminTheme/images/misc/map.jpg" class="rounded" height="120" alt="map">
+            </div> <!--  col.// -->
+        </div> <!--  row.// -->
+    </div> <!--  card-body.// -->
+</div> <!--  card.// -->

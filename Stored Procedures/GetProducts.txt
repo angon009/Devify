@@ -1,0 +1,122 @@
+USE [Devify]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GetProducts]    Script Date: 6/4/2022 6:07:21 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+Create       PROCEDURE [dbo].[GetProducts]
+@PageIndex int,
+@PageSize int , 
+@OrderBy nvarchar(50),
+@StoreId int,
+@CategoryId int = Null,
+@SubcategoryId int = Null,
+@Brand nvarchar(MAX) = Null,
+@Minimum int = Null,
+@Maximum int = Null,
+@Total int output,
+@TotalDisplay int output
+
+
+AS
+BEGIN
+        Declare @sql nvarchar(MAX);
+        Declare @countsql nvarchar(MAX);
+        Declare @paramList nvarchar(MAX); 
+        Declare @countparamList nvarchar(MAX);
+        
+        SET NOCOUNT ON;
+
+
+        Select @Total = count(*) from Products;
+        SET @countsql = 'select @TotalDisplay = count(*) from Products inner join SubCategories
+        on Products.SubCategoryId = SubCategories.Id inner join
+        Categories on Categories.Id = SubCategories.CategoryId 
+        left join (select MIN(Name) as ImageUrl,MIN(Id) as ImageId,ProductId from Images group by ProductId) i
+        on Products.Id = i.ProductId where 1 = 1 AND Products.StoreId = @xStoreId';
+        
+        IF @Brand IS NOT NULL
+        SET @countsql = @countsql + ' AND Brand in (@xBrand)' 
+        IF @SubcategoryId IS NOT NULL
+        SET @countsql = @countsql + ' AND SubCategoryId = @xSubCategoryId'
+        IF @CategoryId IS NOT NULL
+        SET @countsql = @countsql + ' AND CategoryId = @xCategoryId'
+        IF @Minimum IS NOT NULL        
+        SET @countsql = @countsql + ' AND SalePrice >= @xMinimum'
+        IF @Maximum IS NOT NULL
+        SET @countsql = @countsql + ' AND SalePrice <= @xMaximum'
+
+
+        SET @sql = 'select i.ImageUrl as ImageName,Products.Id,Products.Name,Products.Model,Products.Brand,Products.Weight,Products.Size,Products.ProductDetails,Products.SalePrice,Discounts.Percentage
+        from Products inner join SubCategories
+        on Products.SubCategoryId = SubCategories.Id inner join
+        Categories on Categories.Id = SubCategories.CategoryId
+		left join Discounts on Discounts.Id = Products.DiscountId and Discounts.ExpireDate >= SYSDATETIME()  
+        left join (select MIN(Url) as ImageUrl,MIN(Id) as ImageId,ProductId from Images group by ProductId) i
+        on Products.Id = i.ProductId where 1 = 1 AND Products.StoreId = @xStoreId';
+
+
+        IF @Brand IS NOT NULL
+        SET @sql = @sql + ' AND Brand in (@xBrand)' 
+        IF @SubcategoryId IS NOT NULL
+        SET @sql = @sql + ' AND SubCategoryId = @xSubCategoryId'
+        IF @CategoryId IS NOT NULL
+        SET @sql = @sql + ' AND CategoryId = @xCategoryId'
+        IF @Minimum IS NOT NULL        
+        SET @sql = @sql + ' AND SalePrice >= @xMinimum'
+        IF @Maximum IS NOT NULL
+        SET @sql = @sql + ' AND SalePrice <= @xMaximum'
+
+
+        SET @sql = @sql + ' Order by '+@OrderBy+' OFFSET @PageSize * (@PageIndex - 1) 
+        ROWS FETCH NEXT @PageSize ROWS ONLY';
+        
+        SELECT @countparamlist = '@xBrand nvarchar(MAX),
+                @xStoreId int,
+                @xSubCategoryId nvarchar(250),
+                @xCategoryId int,
+                @xMinimum int,
+                @xMaximum int,
+                @TotalDisplay int output';
+
+
+        exec sp_executesql @countsql , @countparamlist ,
+                @Brand,
+                @StoreId,
+                @SubcategoryId,
+                @CategoryId,
+                @Minimum,
+                @Maximum,
+                @TotalDisplay = @TotalDisplay output;
+
+
+        SELECT @paramlist = '@xBrand nvarchar(MAX),
+                @xStoreId int,
+                @xSubCategoryId int,
+                @xCategoryId int,
+                @xMinimum int,
+                @xMaximum int,
+                @PageIndex int,
+                @PageSize int';
+
+
+        exec sp_executesql @sql , @paramlist ,
+                @Brand,
+                @StoreId,
+                @SubcategoryId,
+                @CategoryId,
+                @Minimum,
+                @Maximum,
+                @PageIndex,
+                @PageSize;        
+
+
+        print @countsql;
+END
+GO
+
+

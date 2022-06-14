@@ -1,0 +1,61 @@
+﻿<ul id="messagesList"></ul>
+                    <hr class="my-5">
+                    <div class="jumbotron bg-light">
+                        <h2 class="text-center text-primary">
+                            <i class="fab fa-facebook-messenger">
+                            </i>&nbsp; Reply Now
+                        </h2>
+
+                    </div>
+                    <div class="row" style="max-width:920px">
+                        @*<div class="col-md-12" id="chat">
+                            @if (Model != null)
+                            {
+                                @foreach (var message in ))
+                                {
+                                    string? containerClass = "", timePosition = "", textAlign = "", fontColor = "", offset = "";
+                                    if ("One" == message.Receiver.ToString())
+                                    {
+                                        containerClass = "container darker";
+                                        timePosition = "time-right text-light";
+                                        textAlign = "text-right text-white";
+                                        fontColor = "bg-primary";
+                                        offset = "";
+                                    }
+                                    <div class="row">
+                                        <div class="@offset">
+                                            <div class="@containerClass @fontColor">
+                                                <p class="sender @textAlign">
+                                                    @message.MessageText
+                                                </p>
+                                                <span class="@timePosition">
+                                                    @message.Date.ToString()
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                };
+                            }
+                        </div>*@
+                        <div class="col-md-12">
+                            <form asp-action=""
+                                  data-ajax-begin=""
+                                  data-ajax-complete=""
+                                  data-ajax-failure="alert('Fail')"
+                                  data-ajax-success="sendMessage"
+                                  data-ajax=true
+                                  data-ajax-method="POST">
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <input name="Text" class="form-control" id="messageInput"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Send" id="sendButton" class="btn btn-primary" />
+
+                                </div>
+                                <input type="hidden" value="@User.Identity.Name" name="username" />
+
+                            </form>
+                        </div>
+                    </div> <!-- row.// -->

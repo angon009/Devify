@@ -1,0 +1,44 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "AssignProducts";
+    ViewData["PageNav"] = "Assign a discount to Multiple products";
+}
+@section Styles{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+}
+   
+    <div class="card">
+        <form asp-action="DiscountAssign" asp-controller="Product" asp-area="Vendor" method="post" asp-antiforgery="true">
+        <div class="card-body">
+            <div class="mb-4">
+                <label asp-for="ListOfProductId" class="form-label">Select Products</label><br />
+                <select class="statesSelect form-control" name="ListOfProductId"  multiple asp-items="@Model.products">
+                </select>
+            </div>
+            <div class="mb-4">
+                <label asp-for="DiscountId" class="form-label">Select Discount</label>
+                <select asp-for="DiscountId" class="form-control" id="discountId"
+                    asp-items="@(new SelectList(Model.discountList,"Id","DiscountName"))">
+                    <option selected value="">Choose an Item</option>
+                </select>
+                <span class="text-danger" asp-validation-for="DiscountId"></span>
+            </div>
+        </div>
+        <div class="card-footer my-5">
+            <input class="float-end btn btn-primary rounded" type="submit" value="Assign Discount" />
+        </div>
+    </form>
+    </div>
+
+
+    @section Scripts{
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(".statesSelect").select2();
+        });
+    </script>
+   }
+

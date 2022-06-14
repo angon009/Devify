@@ -1,0 +1,11 @@
+﻿@using ECommerce.Utility
+
+@if(TempData.Peek<ResponseModel>("ResponseMessage") != null)
+{
+    var response = TempData.Get<ResponseModel>("ResponseMessage");
+        <script type="text/javascript">
+            window.onload = function () {
+                toastr.@(response.Type.ToString().ToLower())('@response.Message');
+            };
+        </script>
+}

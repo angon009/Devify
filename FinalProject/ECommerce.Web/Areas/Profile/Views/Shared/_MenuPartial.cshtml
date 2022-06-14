@@ -1,0 +1,15 @@
+﻿<div class="card p-3 h-100">
+    <nav class="nav flex-column nav-pills">
+        <a asp-action="Index" id="indexPage" class="nav-link">Account main</a>
+        <a asp-action="OrdersHistory" id="orderPage" class="nav-link">Orders history</a>
+        <a id="wishlistPage" class="nav-link">My wishlist</a>
+        <a asp-action="Settings" id="settingPage" class="nav-link">Profile setting</a>
+        <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout"
+              asp-route-returnUrl="@Url.Action("Logout", "Account", new { area = "" })">
+            <input id="submit" style="display:none;" class="w-100" type="submit">
+            <a href="" id="logout_link" class="nav-link">
+                Log out
+            </a>
+        </form>
+    </nav>
+</div>

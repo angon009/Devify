@@ -1,0 +1,99 @@
+﻿@using ECommerce.Utility.ChatHub
+@model IEnumerable<MessagePayload>
+@{
+    ViewData["PageNav"] = "Messages";
+    var userName = User.Identity.Name;
+}
+
+@section Styles{
+    
+}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row gx-5">
+                <aside class="col-lg-3 border-end">
+
+                    <nav class="nav nav-pills flex-lg-column mb-4">
+                        <h3 class="bg-muted text-dark  rounded">Recent Customers</h3>
+                        <a class="nav-link" href="#">Customer one</a>
+                        <a class="nav-link" href="#">Customer two</a>
+                        <form asp-action="Index">
+                            <div class="form-group">
+                                    <label>Customer Email</label><br />
+                                    <input name="Text" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                    <input type="submit" value="Show Messages" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </nav>
+
+                </aside>
+                <div class="col-lg-9">
+
+                    <section class="content-body p-xl-4">
+
+                        <div class="container">
+                           
+                            <div class="row">
+                                <div class="col-md-12">
+                            <form asp-area="vendor" asp-controller="Message" asp-action="Create"
+                                 onsubmit="myFunction()"
+                                  data-ajax-begin=""
+                                  data-ajax-complete=""
+                                  data-ajax-failure="alert('Fail')"
+                                  data-ajax-success="sendMessage"
+                                  data-ajax=true
+                                  data-ajax-method="POST">
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <input name="Text" class="form-control"  id="userInput"/>
+                                </div>
+                                 <div class="form-group">
+                                    <input name="Text" class="form-control"  id="userInput2"/>
+                                </div>
+                                <div class="form-group">
+                                    <input name="Text" class="form-control" id="messageInput"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Send" id="sendButton" class="btn btn-primary" />
+
+                                </div>
+                                <input type="hidden" value="@Context.User.Identity.Name" name="username" />
+                                 <label>@Context.User.Identity.Name</label>
+                            </form>
+                        </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <ul id="messagesList"></ul>
+                            </div>
+                        </div>
+
+                    </section> <!-- content-body .// -->
+
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+
+        </div> <!-- card body end// -->
+    </div> <!-- card end// -->
+
+
+    
+@section Scripts{
+    <script>
+        const userName = "@ViewBag.name";
+    </script>
+    <script src="~/js/SendMessage.js"></script>
+    <script src="~/microsoft/signalr/dist/browser/signalr.js"></script>
+     <script src="~/js/ConnectSignalR.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+}

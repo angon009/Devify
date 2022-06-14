@@ -1,0 +1,106 @@
+﻿@model SalesViewModel
+@{
+    ViewData["Title"] = "GetSales";
+}
+@section Styles
+    {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+}
+
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12 justify-content-md-left justify-content-center">
+                            <div class="float-right text-end">
+                                <form asp-action="GetSales" asp-controller="Sales" method="get">
+                                    <span class="mr-3">
+                                        <span>
+                                            <label class="required">From</label>
+                                            <input class="border-0 rounded bg-light p-2 text-success" id="fromDate" asp-for="FromDate" />
+                                        </span>
+                                        <span>
+                                            <label class="required">To</label>
+                                            <input class="border-0 rounded bg-light p-2 text-success" id="toDate" asp-for="ToDate" />
+                                        </span>
+                                    </span>
+                                    <button type="submit" class="btn btn-primary btn-sm rounded p-2 d-inline-flex align-items-center">Search &nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="sales" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Total Price</th>
+                                <th>Discount</th>
+                                <th style="width:10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Total Price</th>
+                                <th>Discount</th>
+                                <th style="width:10%">Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-3">
+            <div class="col-12 justify-content-md-center justify-content-center">
+                <div class="card">
+                    <div class="card-header"><h3>Summary</h3></div>
+                    <div class="card-body">
+                        <h6>Total Sales : @Model.TotalSale</h6>
+                        <h6>Total Sold Amount : $@Model.TotalAmount</h6>
+                        <h6>Total Discount : $@Model.TotalDiscount</h6>
+                    </div>
+                    <hr />
+                    <div class="card-footer">
+                        <h5>Revenue : $@Model.Revenue</h5>
+                        <h5>Profit : @string.Format("${0}", Model.Revenue-Model.TotalCostAmount)</h5>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts{
+    <!-- DataTables -->
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script>
+        $(function() {
+            $('#sales').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/vendor/sales/totalsales",
+                    "data": { from: $('#fromDate').val(), to: $('#toDate').val() },
+                },
+                "columnDefs": [
+                    {
+                        "orderable": false,
+                        "targets": 3,
+                        "render": function(data, type, row) {
+                            return `<button type="submit" class="btn btn-outline btn-info btn-sm rounded-cirlce" onclick="window.location.href='/vendor/Sales/Details/${data}'" value='${data}'>
+                                    <i class="fas fa-eye text-white p-1"></i>
+                                </button>`;
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

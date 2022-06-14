@@ -1,0 +1,183 @@
+﻿@using ECommerce.Web.Areas.Vendor.Models.ForMessageNotification
+@inject IAccountRepository _accountRepo
+@model List<MessageListModel>
+@{
+    string role = (await _accountRepo.GetCurrentUserRolesAsync(User.Identity.Name))[0];
+    if (role == "Customer")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    if (role == "Admin")
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    ViewData["PageNav"] = "Messages";
+    var Receivers = (List<MessageListModel>)ViewBag.Senders;
+    var Sender = (ApplicationUser)ViewBag.Sender;
+    var Receiver = (ApplicationUser)ViewBag.Receiver;
+    var datenow = DateTime.Now;
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/Vendor/Message/style.css">
+}
+
+    <div class="container p-0">
+
+        <div class="card mt-4">
+            <div class="row g-0">
+                <div class="col-12 col-lg-5 col-xl-3 border-right">
+
+                    <div class="px-4 d-none d-md-block">
+                        <div class="d-flex align-items-center">
+                            <form asp-area="vendor" asp-controller="Message" asp-action="Index" method="post">
+                                <div class="flex-grow-1">
+                                    <div class="input-group my-3">
+                                        @if (role == "Customer")
+                                    {
+                                        <h5 class="bg-primary rounded text-center text-wrap p-1" style="color:white;text-size:16px;">Message to Store Admin</h5>
+                                    }
+                                    else
+                                    {
+                                        <input type="text" class="form-control" id="ReceiverEmail" name="ReceiverEmail" placeholder="Search..">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    }
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @*Customers Names*@
+                @{
+                if(role=="Customer"){
+                <a href="#" class="list-group-item list-group-item-action border-0">
+                    <div class="d-flex align-items-start">
+                        <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="rounded-circle mr-1" alt="Haley Kennedy" width="40" height="40">
+                        <div class="flex-grow-1 ml-3">
+                            @Receiver.FirstName
+                            <div class="small"><span class="fas fa-fa-circle chat-offline"></span>Online</div>
+                        </div>
+                    </div>
+                </a>
+                }else
+                {
+                    int count = 0;
+                    foreach (var receiver in Receivers)
+                    {
+                        count++;
+                        <a asp-action="Index" asp-controller="Message" asp-area="Vendor" asp-route-ReceiverEmail="@receiver.SenderEmail" class="list-group-item list-group-item-action border-0">
+                            <div class="d-flex align-items-start">
+                                <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="rounded-circle mr-1" alt="Haley Kennedy" width="40" height="40">
+                                <div class="flex-grow-1 ml-3">
+                                    @receiver.SenderName
+                                    <div class="small"><span class="fas fa-fa-circle chat-offline"></span>Online</div>
+                                </div>
+                            </div>
+                        </a>
+                        if(count==9){
+                            break;
+                        }
+                    }
+                
+                }
+                }
+
+
+                <hr class="d-block d-lg-none mt-1 mb-0">
+            </div>
+            <div class="col-12 col-lg-7 col-xl-9">
+                <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                    <div class="d-flex align-items-center py-1">
+                        <div class="position-relative">
+                            <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                        </div>
+                        <div class="flex-grow-1 pl-3">
+                            <strong>@Receiver.FirstName</strong>
+                            <div class="text-muted small"><em>Active Now</em></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="position-relative">
+                    <div class="chat-messages p-4" id="parentdiv" style="height:400px!important">
+                        @*Messages start from here*@
+                        @{
+                            if (Model.Count > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    DateTime dateObject = (DateTime)item.Date;
+                                    if (item.SenderEmail == User.Identity.Name)
+                                    {
+
+                                        <div class="chat-message-right mb-4">
+                                            <div>
+                                                <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                                <div class="text-muted small text-nowrap mt-2">@dateObject.ToString("hh:mm tt")</div>
+                                            </div>
+                                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                <div class="font-weight-bold mb-1">You</div>
+                                                @item.MessageText
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="chat-message-left pb-4">
+                                            <div>
+                                                <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="rounded-circle mr-1" alt="@Receiver.FirstName" width="40" height="40">
+                                                <div class="text-muted small text-nowrap mt-2">@dateObject.ToString("hh:mm tt")</div>
+                                            </div>
+                                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                                <div class="font-weight-bold mb-1">@item.ReceiverEmail</div>
+                                                @item.MessageText
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                }
+                            }
+
+                        }
+
+                    </div>
+                </div>
+                <form asp-area="vendor" asp-controller="Message" asp-action="Create"
+                      onsubmit="myFunction()"
+                      data-ajax-begin=""
+                      data-ajax-complete=""
+                      data-ajax-failure="alert('Fail')"
+                      data-ajax-success="sendMessage"
+                      data-ajax=true
+                      data-ajax-method="POST">
+                    <div class="flex-grow-0 py-3 px-4 border-top">
+                        <div class="input-group">
+                            <input type="text" name="MessageText" class="form-control" id="messageInput" placeholder="Type your message">
+                            <button type="submit" class="btn btn-primary" id="sendButton">Send</button>
+                        </div>
+                        @*Hidden Field*@
+                        <input name="SenderEmail" class="form-control" value="@Sender.Email" id="userInput" hidden />
+                        <input name="ReceiverEmail" class="form-control" value="@Receiver.Email" id="userInput2" hidden />
+                        <input name="SenderName" class="form-control" value="@Sender.FirstName" hidden />
+                        <input name="ReceiverName" class="form-control" value="@Receiver.FirstName" hidden />
+                        <input name="Date" class="form-control" value="@DateTime.Now" hidden />
+                        <input value="@User.Identity.Name" id="userEmail" hidden />
+                        @*Hidden Field*@
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/SendMessage.js"></script>
+    <script src="~/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/ConnectSignalR.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+  }

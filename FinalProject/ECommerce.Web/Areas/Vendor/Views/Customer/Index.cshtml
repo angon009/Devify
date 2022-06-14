@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Customers";
+    ViewData["PageNav"] = "Current Customers";
+}
+
+@section Styles
+{
+<!-- DataTables -->
+<link rel="stylesheet" href="/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="float-left">
+                            <h3 class="card-title"></h3>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="customer" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Email</th>
+                            <th>Phone Number</th> 
+                            <th>Total Orders</th> 
+                            <th>Total Amount</th> 
+                            <th>Total Discount</th>  
+                        </tr>
+                    </thead> 
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Email</th>
+                            <th>Phone Number</th> 
+                            <th>Total Orders</th> 
+                            <th>Total Amount</th> 
+                            <th>Total Discount</th> 
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <partial name="_ModalPartial" />
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+
+@section Scripts{
+<!-- DataTables -->
+<script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
+<script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script>
+    $(function () {
+        $('#customer').DataTable({
+            "processing": true,
+            "serverSide": true, 
+            "ajax": {
+                "url": "/vendor/customer/getcustomers",
+            },
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": 6
+                }
+            ]
+        }); 
+    }); 
+</script>
+}

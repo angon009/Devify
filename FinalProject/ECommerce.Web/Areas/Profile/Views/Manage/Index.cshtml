@@ -1,0 +1,90 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ECommerce.Web.Enums;
+@using ECommerce.Core.Entities.Users
+@using ECommerce.Membership.Repositories
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IAccountRepository _accountRepo
+@{
+    var user = new ApplicationUser();
+    if (_accountRepo.IsAuthenticated())
+        user = await _accountRepo.GetCurrentUserAsync();
+
+    //var Role=await _accountRepo.GetCurrentUserRolesAsync(user.Email);
+    //if (Role[0]=="Vendor")
+    //{
+
+    //   Layout = "~/Areas/Vendor/Views/Shared/_Layout.cshtml";
+
+    //}
+}
+<section class="padding-y bg-light">
+    <div class="container">
+        <!-- =========================  COMPONENT ACCOUNT 1 ========================= -->
+        <div class="row">
+            <aside class="col-lg-3">
+                <!--  COMPONENT MENU LIST  -->
+                <input hidden id="menuComponent" value="indexPage" />
+                <partial name="_MenuPartial" />
+                <!--   COMPONENT MENU LIST END .//   -->
+            </aside>
+            <main class="col-lg-9">
+                <article class="card">
+                    <div class="card-body">
+
+                        <figure class="itemside align-items-center">
+                            <div class="aside">
+                                <img src=@string.Format("{0}{1}","/Profile/images/people/",(@user.Image!=null)?user.Image:"avatar.jpg") class="icon-md img-avatar">
+                            </div>
+                            <figcaption class="info">
+                                <h6 class="title">@string.Format("{0} {1}", user.FirstName, user.LastName)</h6>
+                                <p>
+                                    Email: @user.Email <i class="dot"></i> Phone: @user.PhoneNumber
+                                    <a asp-action="Settings" class="px-2"><i class="fa fa-pen"></i></a>
+                                </p>
+                            </figcaption>
+                        </figure>
+                        <hr>
+                        <p class="text-muted">Delivery addresses</p>
+                        <div class="row g-2 mb-3">
+                            @foreach (var address in user.Address!)
+                            {
+                                <div class="col-md-6">
+                                    <article class="box">
+                                        <b class="mx-2 text-muted"><i class="fa fa-map-marker-alt"></i></b>
+                                        @string.Format("{0}, {1}, {2}, {3}", address.Division, address.District,
+                                    address.Thana, address.RoadNumber)
+                                    </article>
+                                </div> <!-- col.// -->
+                            }
+
+                        </div> <!-- row.// -->
+
+                        <a class="btn btn-outline-primary waves-effect waves-light" onclick="toastr.error('Error! You can not add another Address.');"> <i class="me-2 fa fa-plus"></i> Add new address </a>
+
+                        <hr>
+
+                        <p class="text-muted">Payment methods</p>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <article class="box">
+                                    <b class="mx-2 text-muted"><i class="fa fa-credit-card"></i></b>
+                                    Visa •••• 9905, Exp: 12/21
+                                </article>
+                            </div> <!-- col.// -->
+                        </div> <!-- row.// -->
+
+                        <a class="btn btn-outline-primary waves-effect waves-light" onclick="toastr.error('Error! Payment gateway unavailable, Please try later.');"> <i class="me-2 fa fa-plus"></i> Add payment method </a>
+
+                    </div> <!-- card-body .// -->
+                </article> <!-- card .// -->
+            </main>
+        </div> <!-- row.// -->
+        <!-- =========================  COMPONENT ACCOUNT 1 END.// ========================= -->
+    </div>
+</section>
+@section Scripts
+{
+<partial name="_ActivatePartial" />
+}

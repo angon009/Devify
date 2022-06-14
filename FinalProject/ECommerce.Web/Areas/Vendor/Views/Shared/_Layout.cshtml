@@ -1,0 +1,233 @@
+﻿@inject IAccountRepository _accountRepo;
+@{
+    var AppUser = await _accountRepo.GetCurrentUserAsync();
+    StoreDetailsViewModel storeInfo = TempData.Peek<StoreDetailsViewModel>("storeInfo");
+}
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+<!-- Mirrored from www.ecommerce-admin.com/demo/page-0-blank.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 09 May 2022 09:32:17 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>StoreAdmin | @ViewData["PageNav"]</title>
+
+    <link href="~/StoreAdminTheme/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+    <link href="~/StoreAdminTheme/css/bootstrapf9e3.css?v=1.1" rel="stylesheet" type="text/css" />
+
+    <!-- custom style -->
+    <link href="~/StoreAdminTheme/css/uif9e3.css?v=1.1" rel="stylesheet" type="text/css" />
+    <link href="~/StoreAdminTheme/css/responsivef9e3.css?v=1.1" rel="stylesheet" />
+    <!-- Toastr css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" type="text/css" rel="stylesheet">
+    <!-- iconfont -->
+    <link rel="stylesheet" href="~/StoreAdminTheme/fonts/material-icon/css/round.css" />
+    <link rel="stylesheet" href="~/StoreAdminTheme/Theme.css">
+    <!-- Font awesome 5 -->
+    <link href="~/Theme/fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+    <b class="screen-overlay"></b>
+
+    <aside class="navbar-aside" id="offcanvas_aside">
+
+        <div class="aside-top">
+            <a asp-action="Index" asp-controller="Dashboard" class="brand-wrap">
+                <img src="~/StoreAdminTheme/images/logo.svg" height="46" class="logo" alt="Ecommerce dashboard template">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize">
+                    <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div> <!-- aside-top.// -->
+
+        <nav>
+            <partial name="_MenuPartial">     <!-- Menu Partial-->
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+
+            <div class="col-search">
+
+                <h2 class="text-primary">@storeInfo.StoreName</h2>
+
+
+                <div class="base">
+                    <span class="subdomain-info">
+
+                        <span class="subdomain-text" style="color:#20A695;" tooltip="Click to Copy" tooltip-position="bottom">@string.Format("https://{0}.localhost:7006/store", storeInfo.SubDomain)</span>
+                    </span>
+                </div>
+
+
+            </div>
+
+
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside">
+                    <i class="md-28 material-icons md-menu"></i>
+                </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" onclick="darkmode(this)" title="Dark mode" href="#">
+                            <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a asp-action="Index" asp-controller="Message">
+                            @*data-bs-toggle="dropdown" class="nav-link btn-icon"*@
+                            <i class="fa-regular fa fa-comment"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end customwidthclass">
+                            <a class="dropdown-item" href="#">
+                                <div class="row">
+                                    <div class="col-3 d-flex align-items-center m-0 p-0">
+                                        <img class="rounded-circle w-100 m-0" src="~/adminLTE/img/user1-128x128.jpg" alt="User Avatar">
+                                    </div>
+                                    <div class="col-9 m-0 ps-1">
+                                        <h3 class="p-0 m-0" style="font-size:14px !important">
+                                            Brad Diesel
+                                            <span class="float-right text-sm text-danger"><i class="fas fa fa-star"></i></span>
+                                        </h3>
+                                        <p class="p-0 m-0" style="font-size:14px !important">Call me anytime...</p>
+                                        <p class="text-muted m-0 p-0" style="font-size:14px !important"><i class="far fa fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item">
+                                <div class="row">
+                                    <div class="col-3 d-flex align-items-center m-0 p-0">
+                                        <img class="rounded-circle w-100 m-0" src="~/adminLTE/img/user1-128x128.jpg" alt="User Avatar">
+
+                                    </div>
+                                    <div class="col-9 m-0 ps-1">
+                                        <h3 class="p-0 m-0" style="font-size:14px !important">
+                                            Brad Diesel
+                                            <span class="float-right text-sm text-danger"><i class="fas fa fa-star"></i></span>
+                                        </h3>
+                                        <p class="p-0 m-0" style="font-size:14px !important">Call me anytime...</p>
+                                        <p class="text-muted m-0 p-0" style="font-size:14px !important"><i class="far fa fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a asp-action="Index" asp-controller="Message" class="dropdown-item dropdown-footer">See All Messages</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#"> <i class="material-icons md-notifications_active"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> English </a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">
+                            <img class="rounded-circle" src=@string.Format("{0}{1}","/Profile/images/people/",(AppUser.Image!=null)?AppUser.Image:"avatar.jpg") width="40" height="40">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="#">@AppUser.FirstName</a>
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Manage" asp-area="Profile">Settings</a>
+                            <a class="dropdown-item" asp-action="stores" asp-controller="Dashboard">Switch Store</a>
+                            <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout"
+                                  asp-route-returnUrl="@Url.Action("Logout", "Account", new { area = "" })">
+                                <button type="submit" class="dropdown-item text-danger">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="content-main">
+
+            <div class="content-header">
+                <h2 class="content-title">@ViewData["PageNav"]</h2>
+            </div>
+
+            <partial name="_ResponsePartial" />
+
+            @RenderBody()
+
+
+
+
+
+
+
+
+        </section> <!-- content-main end// -->
+    </main>
+
+
+    <script>
+        if (localStorage.getItem("darkmode")) {
+            var body_el = document.body;
+            body_el.className += 'dark';
+        }
+
+
+        /********/
+        const copySubdomainId = document.querySelectorAll('.subdomain-text');
+
+        copySubdomainId.forEach(copyText => {
+            copyText.addEventListener('click', () => {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(copyText);
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                try {
+                    document.execCommand('copy');
+                    selection.removeAllRanges();
+
+                    const subdomainId = copyText.textContent;
+                    copyText.textContent = 'Copied!';
+                    copyText.classList.add('success');
+
+                    setTimeout(() => {
+                        copyText.textContent = subdomainId;
+                        copyText.classList.remove('success');
+                    }, 1000);
+                } catch (e) {
+                    copyText.textContent = 'Couldn\'t copy, hit Ctrl+C!';
+                    copyText.classList.add('error');
+
+                    setTimeout(() => {
+                        errorMsg.classList.remove('show');
+                    }, 1200);
+                }
+            });
+        });
+                /***********/
+
+
+    </script>
+
+    <script src="~/StoreAdminTheme/js/jquery-3.5.0.min.js"></script>
+    <script src="~/StoreAdminTheme/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ChartJS files-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+    <!-- Custom JS -->
+    <script src="~/StoreAdminTheme/js/scriptc619.js?v=1.0"></script>
+    <!-- Font Awesome cdn-->
+    <script src="https://use.fontawesome.com/f96b8d852e.js"></script>
+    <!-- Toastr css -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

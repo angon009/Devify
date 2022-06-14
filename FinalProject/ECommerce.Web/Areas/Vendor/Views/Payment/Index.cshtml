@@ -1,0 +1,81 @@
+﻿@model StorePaymentModel
+@{
+    ViewData["Title"] = "Store Payment";
+    ViewData["PageNav"] = "Store Payments";
+}
+@section Styles
+    {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+}
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="float-left">
+                                 
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="float-right text-end">
+                                <form asp-controller="Payment" asp-action="MakePayment" method="post" asp-antiforgery="true" target="_blank">
+                                    <input asp-for="ConfirmUrl" hidden />
+                                    <input asp-for="FailedUrl" hidden />
+                                    <input asp-for="CencelUrl" hidden />
+                                    <button type="submit" class="btn btn-primary rounded">Make Payment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="payment" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Payment Date</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Payment Date</th>
+                                <th>Amount</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+
+    @section Scripts{
+    <!-- DataTables -->
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script>
+        $(function() {
+            $('#payment').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/vendor/payment/getpayments",
+                },
+                "columnDefs": [
+                    {
+                        "orderable": false,
+                        "targets": 2,               
+                    }
+                ]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,352 @@
+﻿<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Type some info">
+    <meta name="author" content="Type name">
+  <title>Devify-@ViewData["Title"]</title>
+
+    <!-- Bootstrap css -->
+    <link href="~/Theme/css/bootstrap.css?v=2.0" rel="stylesheet" type="text/css" />
+
+    <!-- Custom css -->
+    <link href="~/Theme/css/ui.css?v=2.0" rel="stylesheet" type="text/css" />
+    <link href="~/Theme/css/responsive.css?v=2.0" rel="stylesheet" type="text/css" />
+
+    <!-- Font awesome 5 -->
+    <link href="~/Theme/fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Toastr css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" type="text/css" rel="stylesheet">
+
+    <style>
+        .section-content {
+            min-height: 82vh;
+        }
+
+        .close-admin {
+            font-size: 18px;
+            margin: 10px 0 0 10px;
+            color: white;
+        }
+
+            .close-admin > .fa-close:hover {
+                color: red;
+            }
+
+        .admin-menu-body {
+            height: 200px;
+            width: 200px;
+            position: fixed;
+            z-index: 999;
+            right: 0;
+            background-color: #3c8dbc;
+            overflow-x: hidden;
+            transition: 0.5s;
+            right: -200px;
+        }
+    </style>
+    <style>
+        .icon-bar {
+            position: fixed;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+            .icon-bar a {
+                display: block;
+                text-align: center;
+                padding: 10px;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 15px;
+            }
+
+                .icon-bar a:hover {
+                    background-color: #000;
+                }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+    <header class="section-header">
+        <section class="header-main border-bottom">
+            <div class="container">
+                <div class="row gx-2 gy-3">
+                    <div class="col-lg col-md col-6 flex-grow-0">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-wrap me-3">
+                            <img class="logo" height="50" src="~/Theme/images/logo.png">
+                        </a> <!-- brand-wrap end.// -->
+                    </div>
+                    <div class="col-lg col-md col-6 flex-grow-0">
+                        <div class="dropdown float-end">
+                            <button type="button" class="btn btn-light text-nowrap">
+                                <i class="fa me-1 fa-map-marker"></i> Location
+                            </button>
+                        </div> <!-- category-wrap end.// -->
+                    </div> <!-- col end.// -->
+                    <div class=" col-lg-4 col-md col-12">
+                        <form action="#">
+                            <div class="input-group">
+                                <input type="search" class="form-control" placeholder="Search">
+                                <button class="input-group-text btn btn-primary">
+                                    Search
+                                </button>
+                            </div> <!-- input-group end.// -->
+                        </form> <!-- search-wrap end.// -->
+                    </div> <!-- col end.// -->
+                    <div class="col-lg col-12">
+                        <div class="float-md-end">
+                            <partial name="_LoginPartial" />
+
+                            <button class="btn btn-dark d-md-none float-end" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                                <i class="fa fa-bars"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div> <!-- row end.// -->
+            </div> <!-- container end.// -->
+        </section> <!-- header-main end.// -->
+
+       @* <nav class="navbar py-0 py-md-2 navbar-expand-md navbar-light border-bottom">
+            <div class="container">
+                <div class="navbar-collapse collapse" id="main_nav" style="">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link ps-0" href="#"> Categories  </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> About </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Services </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Projects </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                More items
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>  <a class="dropdown-item" href="#">Submenu one </a> </li>
+                                <li> <a class="dropdown-item" href="#">Submenu two</a>  </li>
+                                <li> <a class="dropdown-item" href="#">Submenu three</a> </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                </div> <!-- collapse .// -->
+            </div> <!-- container .// -->
+        </nav>*@
+    </header> <!-- section-header end.// -->
+    @if (User.IsInRole("Admin") || User.IsInRole("Vendor"))
+    {
+        <div class="icon-bar dropdown">
+            <button class="btn btn-primary w-100 mb-2 dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                Admin
+            </button>
+            @if (User.IsInRole("Admin"))
+            {
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu">
+                    <li><a asp-controller="Dashboard" asp-action="Index" asp-area="Admin" class="dropdown-item">Dashboard</a></li>
+                    <li><a asp-controller="Dashboard" asp-action="Index" asp-area="Admin" class="dropdown-item">Stores</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a asp-area="" class="dropdown-item">Payments</a></li>
+                </ul>
+            }
+            else if (User.IsInRole("Vendor"))
+            {
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu">
+                    <li><a asp-area="Vendor" asp-controller="Dashboard" asp-action="Index" class="dropdown-item">Dashboard</a></li>
+                    <li><a asp-area="Vendor" asp-controller="Products" asp-action="Index" class="dropdown-item">Products</a></li>
+                    <li><a asp-area="Vendor" asp-controller="Orders" asp-action="Index" class="dropdown-item">Orders</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a asp-area="Vendor" asp-controller="Dashboard" asp-action="Stores" class="dropdown-item">Stores</a></li>
+                </ul>
+            }
+        </div>
+    }
+
+
+    <section class="section-content bg-light">
+        <partial name="_ResponsePartial" />
+        @RenderBody()
+    </section> <!--   SECTION CONTENT END.//  -->
+
+    <!--   SECTION CART MODAL  -->
+    <aside class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas_cart">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title"> Your cart (3) </h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <figure class="itemside mb-4">
+                <div class="aside">
+                    <img src="~/Theme/images/items/14.jpg" class="border img-sm rounded">
+                </div>
+                <figcaption class="info">
+                    <a href="#" class="btn btn-icon btn-light float-end"><i class="fa fa-trash"></i></a>
+                    <p> Leather Wallet for Men</p>
+                    <span class="text-muted">1 x $200.95 </span> <br>
+                    <strong class="price"> $400.90 </strong>
+                </figcaption>
+            </figure>
+
+            <figure class="itemside  mb-4">
+                <div class="aside">
+                    <img src="~/Theme/images/items/2.jpg" class="border img-sm rounded">
+                </div>
+                <figcaption class="info">
+                    <a href="#" class="btn btn-icon btn-light float-end"><i class="fa fa-trash"></i></a>
+                    <p> Canon EOS 1400 Black </p>
+                    <span class="text-muted">2 x $169.95 </span> <br>
+                    <strong class="price"> $339.90 </strong>
+                </figcaption>
+            </figure>
+
+            <figure class="itemside  mb-4">
+                <div class="aside">
+                    <img src="~/Theme/images/items/11.jpg" class="border img-sm rounded">
+                </div>
+                <figcaption class="info">
+                    <a href="#" class="btn btn-icon btn-light float-end"><i class="fa fa-trash"></i></a>
+                    <p> Winter Jacket for men and lady </p>
+                    <span class="text-muted">2 x $169.95 </span> <br>
+                    <strong class="price"> $339.90 </strong>
+                </figcaption>
+            </figure>
+            <hr>
+
+            <p class="mb-3 text-center"> Subtotal:  <strong class="text-danger">$893.00</strong>  </p>
+            <div class="mb-3">
+                <a href="#" class="btn w-100 btn-success"> Checkout </a>
+            </div>
+            <p class="mb-3 text-center"> <img src="~/Theme/images/misc/payments.png" height="22">  </p>
+
+        </div> <!-- offcanvas-body -->
+    </aside> <!-- offcanvas -->
+    <!-- ===========  SECTION FOOTER 2 ========== -->
+    <footer class="section-footer bg-white shadow">
+        <div class="container">
+            <section class="footer-main padding-y">
+                <div class="row">
+                    <aside class="col-md-12 col-lg-3 col-xl-3">
+                        <article class="me-lg-4">
+                            <img src="~/Theme/images/logo.png" class="logo-footer">
+                            <p class="mt-3">
+                                © 2018- 2021 Templatemount. <br>
+                                All rights reserved.
+                            </p>
+
+                        </article>
+                    </aside>
+                    <aside class="col-6 col-md-3 col-lg-2 col-xl-2">
+                        <h6 class="title">Store</h6>
+                        <ul class="list-menu mb-3">
+                            <li> <a href="#">About us</a></li>
+                            <li> <a href="#">Find store</a></li>
+                            <li> <a href="#">Categories</a></li>
+                            <li> <a href="#">Blogs</a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-6 col-md-3 col-lg-2 col-xl-2">
+                        <h6 class="title">Information</h6>
+                        <ul class="list-menu mb-3">
+                            <li> <a href="#">Help center</a></li>
+                            <li> <a href="#">Money refund</a></li>
+                            <li> <a href="#">Shipping info</a></li>
+                            <li> <a href="#">Refunds</a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-6 col-md-3 col-lg-2 col-xl-2">
+                        <h6 class="title">Support</h6>
+                        <ul class="list-menu mb-3">
+                            <li> <a href="#"> Help center </a></li>
+                            <li> <a href="#"> Documents </a></li>
+                            <li> <a href="#"> Account restore </a></li>
+                            <li> <a href="#"> My Orders </a></li>
+                        </ul>
+                    </aside>
+                    <aside class="col-6 col-md-3 col-lg-3 col-xl-3">
+                        <h6 class="title">Call us</h6>
+                        <p class="h5 mb-0">(800) 060-0730</p>
+                        <small class="text-muted">(9-13 and 14-18 ; Mon-Fri)</small>
+                        <nav class="mt-3">
+                            <a class="btn btn-icon btn-light" title="Facebook" target="_blank" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-icon btn-light" title="Instagram" target="_blank" href="#"><i class="fab fa-instagram"></i></a>
+                            <a class="btn btn-icon btn-light" title="Youtube" target="_blank" href="#"><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-icon btn-light" title="Twitter" target="_blank" href="#"><i class="fab fa-twitter"></i></a>
+                        </nav>
+                    </aside>
+                </div> <!-- row.// -->
+            </section>  <!-- footer-top.// -->
+
+            <section class="footer-bottom d-flex justify-content-between border-top">
+                <div>
+                    <i class="fab fa-lg fa-cc-visa"></i>
+                    <i class="fab fa-lg fa-cc-amex"></i>
+                    <i class="fab fa-lg fa-cc-mastercard"></i>
+                    <i class="fab fa-lg fa-cc-paypal"></i>
+                </div>
+                <nav class="dropup">
+                    <button class="dropdown-toggle btn d-flex align-items-center py-0" type="button" data-bs-toggle="dropdown">
+                        <img src="~/Theme/images/flags/flag-usa.png" class="me-2" height="20"> <span>English</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Russian</a></li>
+                        <li><a class="dropdown-item" href="#">Arabic</a></li>
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                    </ul>
+                </nav>
+
+            </section>
+        </div> <!-- container end.// -->
+    </footer>
+    <!-- ===========  SECTION FOOTER 2 END.// ========== -->
+    <!-- Bootstrap js -->
+    <script src="~/Theme/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom js -->
+    <script src="~/Theme/js/script.js?v=1.0"></script>
+
+    <!-- JQuery -->
+    <script src="~/StoreAdminTheme/js/jquery-3.5.0.min.js"></script>
+
+    <!-- Toastr css -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+<script>
+    $(function () {
+        if (JSON.parse(sessionStorage.getItem("isAdminMenuOpen")) === true) {
+            document.getElementById("admin-menu-body").style.transition = "0s";
+            document.getElementById("admin-menu-body").style.right = "0px";
+        }
+    });
+
+    $(function () {
+        $('#open-admin').on('click', function () {
+            document.getElementById("admin-menu-body").style.right = "0px";
+            sessionStorage.setItem("isAdminMenuOpen", JSON.stringify(true));
+        });
+
+        $('#close-admin').on('click', function () {
+            document.getElementById("admin-menu-body").style.transition = "0.5s";
+            document.getElementById("admin-menu-body").style.right = "-200px";
+            sessionStorage.setItem("isAdminMenuOpen", JSON.stringify(false));
+        });
+    });
+</script>

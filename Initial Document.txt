@@ -1,0 +1,4 @@
+First You have to create migration for this project
+ -then update database using migration command 
+ - Run stored procedure in the database
+ - Run the project and enjoy thanks. 

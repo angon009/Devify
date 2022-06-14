@@ -1,0 +1,12 @@
+﻿.customMargin {
+    margin:0 auto !important;
+    display:table;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.logoSize {
+    width: 60px !important;
+}

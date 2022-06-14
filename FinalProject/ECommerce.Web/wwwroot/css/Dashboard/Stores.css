@@ -1,0 +1,182 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+/* .right-bg{
+  background-color: #004c3f;
+
+} */
+
+/* .overflow-scroll-on{
+  overflow-y: scroll !important;
+  background-color: #ffffff;
+} */
+.dynamic-user-button {
+    background-color: rgba(255, 255, 255);
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255);
+    border-radius: 5px;
+    outline: none;
+}
+
+    .dynamic-user-button:hover {
+        background-color: rgba(246, 246, 247, 1);
+        transition: all 0.5s;
+    }
+
+.btn-user-name {
+    background-color: rgba(253, 201, 208, 1);
+    color: rgb(79, 14, 31);
+    font-weight: 400;
+    width: 35px;
+    height: 35px;
+    padding: 8px;
+    margin-right: 5px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-user-name1 {
+    background-color: rgba(253, 201, 208, 1);
+    color: rgb(79, 14, 31);
+    font-weight: 400;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    margin-right: 5px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.btn-user-icon {
+    color: rgb(92, 95, 98);
+}
+/* rgb(32, 34, 35)  */
+.account-option span {
+    color: rgb(32, 34, 35);
+    font-size: 13px;
+}
+
+.account-option .fas {
+    color: rgb(92, 95, 98);
+}
+
+.user-name {
+    font-size: 14px;
+}
+
+.user-email {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgb(109, 113, 117);
+}
+
+.store-title {
+    color: rgb(32, 34, 35);
+    font-size: 2rem;
+}
+
+.create-store-btn {
+    background-color: rgb(0, 128, 96) !important;
+    border: 1px solid rgb(0, 128, 96) !important;
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+}
+
+    .create-store-btn:hover {
+        background-color: rgba(0, 94, 70, 1) !important;
+        border: 1px solid rgb(0, 128, 96) !important;
+        transition: all ease 0.4s;
+    }
+
+.created-store {
+    box-shadow: 0 2px 1px rgb(0 0 0 / 5%), 0 0 1px rgb(0 0 0 / 25%);
+    border-radius: inherit;
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.2s;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 5px;
+}
+
+    .created-store:hover {
+        /* box-shadow:  0px 26px 80px rgba(0, 0, 0, 0.2), 0px 0px 1px rgba(0, 0, 0, 0.2); */
+        box-shadow: -1px 0px 20px rgba(23, 24, 24, 0.05), 0px 1px 5px rgba(0, 0, 0, 0.15);
+        transition: all ease 0.5s;
+    }
+
+.create-store-icon {
+    color: rgb(92, 95, 98);
+    background-color: rgb(246, 246, 247);
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.created-store:hover .create-store-icon {
+    color: #1a1c1d;
+    background-color: #dbdddf;
+    transition: all ease 0.2s;
+}
+
+.create-store-name {
+    color: rgb(32, 34, 35);
+}
+
+.create-store-email {
+    color: rgb(109, 113, 117);
+    font-size: 13px;
+}
+
+.learn-icon {
+    transform: rotate(180deg);
+    margin-top: -15px;
+    margin-right: 5px;
+    color: rgba(0, 160, 172, 1);
+}
+
+.share-icon {
+    margin-left: 5px;
+    font-weight: 300;
+    font-size: 12px;
+}
+/* right side */
+.right-bg {
+    background-color: rgba(255, 255, 255) !important;
+}
+
+.right-img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+.col-12.col-md-12.col-lg-6.h-100.right-bg.d-none.d-lg-block.position-fixed.end-0.right-bg {
+    padding: 0;
+}
+ /*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+    form .CustomClass
+    {
+        padding: 0px 100px;
+    }
+}
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    form .CustomClass
+    {
+        padding: 0px 100px;
+    }
+}
+

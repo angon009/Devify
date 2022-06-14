@@ -1,0 +1,97 @@
+﻿@model ECommerce.Web.Areas.Vendor.Models.ProductModels.InventoryAlertCountModel
+@{
+    ViewData["Title"] = "Inventory";
+    ViewData["PageNav"] = "Set Inventory Alert";
+    var storeInfo = TempData.Peek<StoreDetailsViewModel>("StoreInfo");
+}
+<div class="card mb-4">
+    <div class="card-header bg-warning" style="height:150px">
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl col-lg flex-grow-0" style="flex-basis:230px">
+                <div class="img-thumbnail shadow w-100 bg-white position-relative text-center" style="height:190px; width:200px; margin-top:-120px">
+                    @if (storeInfo.LogoUrl == null)
+                    {
+                        <img src="~/storeadmintheme/images/brands/brand.jpg" class="center-xy img-fluid" alt="Logo Brand">
+                    }
+                    else
+                    {
+                        <img src="~/images/stores/@storeInfo.LogoUrl" class="center-xy img-fluid" alt="Logo Brand">
+                    }
+                </div>
+            </div> <!--  col.// -->
+            <div class="col-xl col-lg">
+                <h3>@storeInfo.StoreName</h3>
+                <p>@storeInfo.RoadNo, @storeInfo.Thana, @storeInfo.District, @storeInfo.Division</p>
+            </div> <!--  col.// -->
+            <div class="col-xl-4 text-md-end">
+                @if (storeInfo.StoreStatusId == 1)
+                {
+                    <a href="#" class="btn btn-primary float-end">ACTIVE<i class="material-icons md-launch"></i> </a>
+                }
+                else if (storeInfo.StoreStatusId == 3)
+                {
+                    <a href="#" class="btn btn-primary float-end">ON DELETE<i class="material-icons md-launch"></i> </a>
+                }
+                else
+                {
+                    <a href="#" class="btn btn-primary float-end">INACTIVE<i class="material-icons md-launch"></i> </a>
+                }
+
+            </div>
+        </div> <!-- card-body.// -->
+        <hr class="my-4">
+        <div class="row g-4">
+           
+            <div class="col-sm-6 col-lg-5 col-xl-3">
+                <h6>Contacts</h6>
+                <p>
+                    @storeInfo.Email<br>
+                    @storeInfo.Phone
+                </p>
+            </div> <!--  col.// -->
+            <div class="col-sm-6 col-lg-5 col-xl-3">
+                <h6>Address</h6>
+                <p>
+                    Country: Bangladesh<br>
+                    Address: @storeInfo.RoadNo, @storeInfo.Thana @storeInfo.District, @storeInfo.Division<br>
+                    Postal code: @storeInfo.post
+                </p>
+            </div> <!--  col.// -->
+            <div class="col-sm-6 col-xl-5 text-xl-end">
+                <img src="~/StoreAdminTheme/images/misc/map.jpg" class="rounded" height="120" alt="map">
+            </div> <!--  col.// -->
+        </div> <!--  row.// -->
+        <div class="card">
+            <div class="card-header">
+                Set Minimum Product Number for Inventory Alert
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Minimum Amount</h5>
+                 <form asp-action="Update">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox"  asp-for="isActive">
+                <label class="form-check-label" for="Status">Activate Inventory Alert</label>
+            </div>
+            <div class="row g-4">
+                <div class="form-group">
+                    <label asp-for="MinimumStock" class="control-label">Minimum Stock</label>
+                    <input asp-for="MinimumStock" class="form-control" />
+                </div>
+                 <input asp-for="StoreId" value="@storeInfo.Id" class="form-control" hidden />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Set Minimum Stock Now" class="btn btn-primary my-3" />
+            </div>
+        </form>
+            </div>
+            <div class="card-footer text-muted">
+                Minimum product will help you to alert when your product stock is going lower than the minimum amount you set.
+            </div>
+        </div>
+       
+    </div> <!--  card-body.// -->
+</div> <!--  card.// -->
+<partial name="~/Views/Shared/_ResponsePartial.cshtml"></partial>

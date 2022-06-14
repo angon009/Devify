@@ -1,0 +1,196 @@
+﻿@model StoreUpdateModel
+@{
+    ViewData["Title"] = "Store";
+    ViewData["PageNav"] = "Store";
+    StoreDetailsViewModel storeInfo =TempData.Peek<StoreDetailsViewModel>("storeInfo");
+}
+
+<!--Shop Edit Form-->
+<form method="post" enctype="multipart/form-data" asp-antiforgery="true" asp-action="Update" asp-controller="Store">
+
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <!--Shop Banner-->
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h5 class="text-center">Shop Banner</h5>
+                            </div>
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    @if (storeInfo.CoverPhotUrl != null)
+                                    {
+                                        <img id="slider_one1" class="img-fluid img-rounded" src="~/Images/Stores/@storeInfo.CoverPhotUrl" alt="No Image" />
+                                    }
+                                    else
+                                    {
+                                        <img id="slider_one1" class="img-fluid img-rounded" src="~/Images/Stores/NoImage.png" alt="No Image" />
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                               
+                                <input asp-for="CoverPhoto" class="custom-file-input" placeholder="Change Banner"/>
+                            </div>
+                        </div>
+                        <!--./Shop Banner-->
+                        <!--Shop Logo-->
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h5 class="text-center">Shop Logo</h5>
+                            </div>
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    
+                                     @if (storeInfo.LogoUrl != null)
+                                    {
+                                        <img id="slider_one2" class="profile-user-img img-fluid img-circle" src="~/Images/Stores/@storeInfo.LogoUrl" alt="No Image" />
+                                    }
+                                    else
+                                    {
+                                        <img id="slider_one2" class="profile-user-img img-fluid img-circle" src="~/Images/Stores/NoImage.png" alt="No Image" />
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input asp-for="StoreLogo" class="custom-file-input" placeholder="Change logo"/>
+                                <input asp-for="CoverImageId" value="@storeInfo.CoverImageId" hidden/>
+                                <input asp-for="LogoImageId" value="@storeInfo.LogoImageId" hidden/>
+                                <span asp-validation-for="StoreLogo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!--./Shop Banner-->
+                    </div>
+
+                    <div class="col-md-9">
+                        <!--Shop Informations-->
+                        <div class="card">
+                            <div class="card-header pt-2">
+                                <h5>Shop Informations</h5>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group row  py-3">
+                                    <label asp-for="StoreName" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" value="@storeInfo.StoreName" class="form-control" asp-for="StoreName" />
+                                        <span asp-validation-for="StoreName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row  py-3">
+                                    <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="EmailId" value="@storeInfo.EmailId" class="form-control" hidden/>
+                                        <input type="email" value="@storeInfo.Email"  class="form-control" asp-for="Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row  py-3">
+                                    <label asp-for="Phone"class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-10">
+                                         <input asp-for="PhoneId" value="@storeInfo.PhoneId"  class="form-control" hidden/>
+                                        <input type="tel"  value="@storeInfo.Phone"   class="form-control" asp-for="Phone" />
+                                        <span asp-validation-for="Phone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <fieldset>
+                                 <legend>Address:</legend>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group row  py-1">
+                                             <input asp-for="AddressId" value="@storeInfo.AddressId"  class="form-control" hidden/>
+                                            <label asp-for="Division" class="col-sm-4 col-form-label"></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" value="@storeInfo.Division" class="form-control" asp-for="Division" />
+                                                <span asp-validation-for="Division" class="text-danger"></span>
+                                             </div>
+                                              
+                                         </div>
+                                         <div class="form-group row  py-1">
+                                            <label asp-for="Thana" class="col-sm-4 col-form-label"></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" value="@storeInfo.Thana"  class="form-control" asp-for="Thana" />
+                                                 <span asp-validation-for="Thana" class="text-danger"></span>
+                                             </div>
+                                         </div>
+                                         <div class="form-group row  py-1">
+                                            <label asp-for="RoadNo" class="col-sm-4 col-form-label"></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" value="@storeInfo.RoadNo" class="form-control" asp-for="RoadNo" />
+                                                 <span asp-validation-for="RoadNo" class="text-danger"></span>
+                                             </div>
+                                         </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row  py-1">
+                                            <label asp-for="District" class="col-sm-4 col-form-label"></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" value="@storeInfo.District"  class="form-control" asp-for="District" />
+                                                 <span asp-validation-for="District" class="text-danger"></span>
+                                             </div>
+                                         </div>
+                                         <div class="form-group row  py-1">
+                                            <label asp-for="post"  value="@storeInfo.post"  class="col-sm-4 col-form-label"></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" value="@storeInfo.post"  class="form-control" asp-for="post" />
+                                                 <span asp-validation-for="post" class="text-danger"></span>
+                                             </div>
+                                         </div>
+                                          <input type="hidden" value="@storeInfo.Id"  class="form-control" asp-for="Id" />
+                                          <input type="hidden" value="@storeInfo.StoreStatusId"  class="form-control" asp-for="StoreStatusId" />
+                                          <input type="hidden" value="@storeInfo.UserId"  class="form-control" asp-for="UserId" />
+                                          <input type="hidden" value="@storeInfo.CoverImageName"  class="form-control" asp-for="CoverImageName" />
+                                          <input type="hidden" value="@storeInfo.LogoImageName"  class="form-control" asp-for="LogoImageName" />
+                                          <input type="hidden" value="@storeInfo.CoverPhotUrl"  class="form-control" asp-for="CoverPhotUrl" />
+                                          <input type="hidden" value="@storeInfo.LogoUrl"  class="form-control" asp-for="LogoUrl" />
+                                    </div>
+                                </div>
+                                </fieldset>
+                                
+                            </div>
+                        </div>
+                        <!--./Shop informations-->
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <h5 class="text-center">
+                    <input type="submit" value="Update" class="btn btn-primary rounded" />
+                 </h5>
+            </div>
+        </div>
+    </div>
+
+</form>
+<!-- ./Shop Edit Form -->
+
+
+
+@section Scripts{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+@*Image*@
+<script>
+    CoverPhoto.onchange = evt => {
+        const [file] = CoverPhoto.files
+        if (file) {
+            slider_one1.src = URL.createObjectURL(file)
+        }
+    }
+
+    StoreLogo.onchange = evt => {
+        const [file] = StoreLogo.files
+        if (file) {
+            slider_one2.src = URL.createObjectURL(file)
+        }
+    }
+</script>
+}

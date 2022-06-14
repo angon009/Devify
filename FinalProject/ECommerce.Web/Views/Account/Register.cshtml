@@ -1,0 +1,102 @@
+﻿@model RegisterModel
+@{ 
+    ViewData["Title"] = "Account Register";
+}
+
+
+<section class="p-2 bg-light" style="min-height:90vh">
+    <div class="container">
+        <!-- ====== COMPONENT LOGIN  ====== -->
+        <div class="card shadow mx-auto" style="max-width:600px; margin-top:40px;">
+            <div class="card-body">
+                <h4 class="card-title mb-6">Sign up</h4>
+                <form id="registerForm" asp-controller="Account" asp-action="Register" method="Post"
+                      asp-antiforgery="true" asp-route-returnUrl=@Model!.ReturnUrl>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row gx-2">
+                        <div class="col-6 mb-3">
+                            <label class="form-label" asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" autocomplete="First name" aria-required="true" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label" asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" autocomplete="Last name" aria-required="true" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div> <!-- row // -->
+                    <div class="row gx-3">
+                        <div class="col mb-6">
+                            <label class="form-label" asp-for="District"></label>
+                            <input type="text" class="form-control" asp-for="District">
+                        </div> <!-- col end.// -->
+                        <div class="col mb-6">
+                            <label class="form-label" asp-for="Division"></label>
+                            <input type="text" class="form-control" asp-for="Division">
+                        </div> <!-- col end.// -->
+                        <div class="col mb-3">
+                            <label class="form-label" asp-for="Thana"></label>
+                            <input type="text" class="form-control" asp-for="Thana">
+                        </div> <!-- col end.// -->
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label" asp-for="RoadNumber"></label>
+                            <input type="text" class="form-control" asp-for="RoadNumber" placeholder="">
+                        </div> <!-- col end.// -->
+
+                        <div class="col-6 mb-3">
+                            <label class="form-label" asp-for="Email"></label>
+                            <input type="email" class="form-control" asp-for="Email" placeholder="">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <small class="form-text">We'll never share your email</small>
+                        </div> <!-- col end.// -->
+                        <div class="col-6 mb-3">
+                            <label class="form-label" asp-for="PhoneNumber"></label>
+                            <div class="input-group">
+                                <select class="form-select" style="max-width: 120px">
+                                    <option value="us">US +1 </option>
+                                    <option selected="" value="us">BD +880 </option>
+                                    <option value="uz">UZ +998</option>
+                                    <option value="ru">RU +72 </option>
+                                </select>
+                                <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="">
+                            </div>
+                        </div> <!-- col end.// -->
+                        <div class="col mb-3">
+                            <label class="form-label" asp-for="Password"></label>
+                            <input class="form-control" asp-for="Password" type="password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div> <!-- col end.// -->
+
+                        <div class="col mb-3">
+                            <label class="form-label" asp-for="ConfirmPassword"></label>
+                            <input class="form-control" asp-for="ConfirmPassword" type="password">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div> <!-- col end.// -->
+                    </div> <!-- row end.// -->
+                    <div class="mb-4">
+                        <button type="submit" class="btn btn-primary w-100"> Register  </button>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked value="">
+                            <span class="form-check-label"> I agree with Terms and Conditions </span>
+                        </label>
+                    </div>
+                </form>
+                <hr>
+                <p class="text-center mb-2">Already have account? <a asp-action="Login">Sign in</a></p>
+
+            </div> <!-- card-body.// -->
+        </div> <!-- card .// -->
+        <!-- ====== COMPONENT LOGIN  END.// ====== -->
+        <br /><br />
+    </div> <!-- container .//  -->
+</section>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}
+
+

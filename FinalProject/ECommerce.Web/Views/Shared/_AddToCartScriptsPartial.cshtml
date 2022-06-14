@@ -1,0 +1,38 @@
+﻿<script>
+function AddToCart(id){
+       $.ajax({
+          url: '@Url.Action("AddToCart", "Store")',
+          type: 'GET',
+          dataType: 'json',
+          cache: false,
+          data: { 'id': id, 'qty': $('#quantity').val(), 'discountId': $('#discountId').val() },
+          success: function (results) {
+              if(results==true)
+              {
+                  OnSuccess();
+                  toastr.success("Item successfully added to cart!");
+                  return;
+              }
+              toastr.error("Error occured! Please try again.");
+          },
+          error: function () {
+           toastr.error('Error occured');
+          }
+       });
+    }
+    function OnSuccess() {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("CountCart", "Store")',
+            data: {},
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                document.getElementById('cartCount').innerHTML = 'Cart'+' '+'('+result+')';
+            },
+            failure: function (response) {
+                toastr.error('Error occured');
+            }
+        });
+    }
+</script>

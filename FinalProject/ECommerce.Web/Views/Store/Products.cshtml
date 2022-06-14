@@ -1,0 +1,232 @@
+﻿@using System.Globalization
+@using ECommerce.Utility
+@model ProductListModel
+@{
+    ViewData["Title"] = "Product List";
+}
+@section Styles{
+<style>
+    #pagingDiv a, #pagingDiv span {
+        display: inline-block;
+        padding: 2px 12px;
+        margin-right: 4px;
+        border-radius: 3px;
+        border: solid 1px #c0c0c0;
+        background: #0B5ED7;
+        /*box-shadow: inset 0px 1px 0px rgba(255,255,255, .8), 0px 1px 3px rgba(0,0,0, .1);*/
+        font-size: .875em;
+        /*font-weight: bold;*/
+        text-decoration: none;
+        color: #FFFFFF;
+        text-shadow: 0px 1px 0px rgba(255,255,255, 1);
+    }
+
+        #pagingDiv a:hover {
+            background: #fefefe;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEFEFE), to(#f0f0f0));
+            background: -moz-linear-gradient(0% 0% 270deg,#FEFEFE, #f0f0f0);
+            color: #000000;
+        }
+
+        #pagingDiv a.active {
+            border: none;
+            background: #fefefe;
+            box-shadow: inset 0px 0px 8px rgba(255,255,255, .8), 0px 1px 0px rgba(255,255,255, .8);
+            color: #000000;
+            /*text-shadow: 0px 0px 3px rgba(0,0,0, .5);*/
+        }
+
+    #pagingDiv span {
+        color: #f0f0f0;
+        background: #616161;
+    }
+</style>
+}
+<section class="padding-y bg-light">
+    <div class="container">
+
+        <div class="row">
+            <!--Main Product List-->
+            <main class="col-lg-9">
+                @{
+                    if (@ViewBag.Products != null)
+                    {
+                        foreach (var item in ViewBag.Products.Result.Item3)
+                        {
+                            <article class="card card-product-list">
+                                <div class="row g-0">
+                                    <aside class="col-xl-3 col-lg-4 col-md-12 col-12">
+                                        <a href="#" class="img-wrap">
+                                            @if (item.ImageName != null)
+                                            {
+                                                <img src="@Model.ProductImageUrl@item.ImageName">
+                                            }
+                                            else
+                                            {
+                                                <img src="" alt="No Image">
+                                            }
+                                        </a>
+                                    </aside> <!-- col.// -->
+                            <div class="col-xl-6 col-lg-5 col-md-7 col-sm-7">
+                                        <div class="card-body">
+                                            <a asp-controller="Store" asp-action="ProductDetails" asp-route-id="@item.Id"
+                                   class="h6 title mb-3"> @item.Name @item.Model, @item.Brand </a>
+                                            <p>Size : @item.Size</p>
+                                            <p>Weight : @item.Weight</p>
+                                            <p>@item.Details</p>
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="">
+                                                <span class="form-check-label"> Add to compare </span>
+                                            </label>
+                                        </div> <!-- info-main.// -->
+                            </div> <!-- col.// -->
+                            <aside class="col-xl-3 col-lg-3 col-md-5 col-sm-5">
+                                        <div class="info-aside">
+                                            <div class="price-wrap">
+                                                //@if (@item.Percentage == 0)
+                                                    //{
+                                                    //    <span class="price h5"> @item.SalePrice.ToString("C", CultureInfo.CurrentCulture) </span>
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    @if (item.Percentage != null)
+                                                    {
+                                                        <span class="price h5"> @string.Format("{0}",(item.Percentage != null)?(item.SalePrice-(item.SalePrice*item.Percentage)/100).ToString("C", CultureInfo.CurrentCulture):null) </span>
+
+                                                        <del class="price-old"> @item.SalePrice.ToString("C", CultureInfo.CurrentCulture)</del>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="price h5"> @string.Format("{0}",item.SalePrice.ToString("C", CultureInfo.CurrentCulture)) </span>
+                                                    }
+                                                //}
+                                            </div> <!-- info-price-detail // -->
+                                    <p class="text-success">Free shipping</p>
+                                            <p class="text-muted"> 1-2 weeks </p>
+                                            <br>
+                                            <input id="discountId" hidden value="@item.DiscountId" />
+
+                                            <a id="addToCart" onclick="AddToCart(@item.Id)" class="btn btn-primary w-100 mb-2"> Add to cart </a>
+                                            <a href="#" class="btn btn-outline-primary w-100"> Wishlist </a>
+
+                                        </div> <!-- info-aside.// -->
+                            </aside> <!-- col.// -->
+                        </div> <!-- row.// -->
+                    </article> <!-- card-product .// -->
+                        }
+                    }
+                }
+                <div class="text-center" id="pagingDiv">@Html.Raw(ViewBag.Pagination)</div>
+            </main> <!-- col.// -->
+            <!--./End of Main Product List-->
+            <aside class="col-lg-3 col-sm-6 d-lg-block">
+                <!-- COMPONENTS SIDEBAR -->
+                <div class="card">
+                    <form id="form" asp-controller="Store" asp-action="Products" method="get">
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" class="title" data-bs-toggle="collapse" data-bs-target="#collapse_aside1" aria-expanded="true">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    Categories
+                                </a>
+                            </header>
+                            <div class="collapse show" id="collapse_aside1" style="">
+                                <div class="card-body">
+                                    <ul class="list-menu">
+                                        @if (ViewBag.Categories != null)
+                                        {
+                                            @foreach (var category in ViewBag.Categories)
+                                            {
+                                                <li>
+                                                    <a asp-controller="store" asp-action="products" asp-route-CategoryId="@category.Id" class="d-inline fw-bold">@category.CategoryName</a>
+                                                    @if (category.SubCategories.Count != 0)
+                                                    {
+                                                        <a href="2" class="d-inline" data-bs-toggle="collapse" data-bs-target="#collapse_aside_@category.Id" aria-expanded="true">
+                                                            <i class="icon-control fa fa-chevron-down"></i>
+                                                        </a>
+                                                        <ul class="collapse @(Model.CategoryId == category.Id ? "show" : "") list-menu mx-3" id="collapse_aside_@category.Id">
+                                                            @foreach (var subCategory in category.SubCategories)
+                                                            {
+                                                                <li><a asp-controller="store" asp-action="products" asp-route-SubCategoryId="@subCategory.Id">@subCategory.SubCategoryName</a></li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                    <input asp-for="CategoryId" hidden />
+                                    <input asp-for="SubCategoryId" hidden />
+                                </div> <!-- card-body.// -->
+                            </div>
+                        </article> <!-- filter-group // -->
+
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" class="title" data-bs-toggle="collapse" data-bs-target="#collapse_aside2" aria-expanded="true">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    Price
+                                </a>
+                            </header>
+                            <div class="collapse show" id="collapse_aside2" style="">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label for="min" class="form-label">Min</label>
+                                            <input class="form-control" asp-for="MinimumPrice" placeholder="$0" type="number">
+                                        </div> <!-- col end.// -->
+
+                                        <div class="col-6">
+                                            <label for="max" class="form-label">Max</label>
+                                            <input class="form-control" asp-for="MaximumPrice" placeholder="$1,0000" type="number">
+                                        </div> <!-- col end.// -->
+                                    </div> <!-- row end.// -->
+                                </div> <!-- card-body.// -->
+                            </div>
+                        </article> <!-- filter-group // -->
+
+
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" class="title" data-bs-toggle="collapse" data-bs-target="#collapse_aside4">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    Brand
+                                </a>
+                            </header>
+                            <div class="collapse show" id="collapse_aside4">
+                                <div class="card-body">
+                                    @if (ViewBag.Brands.Count != 0)
+                                    {
+                                        @foreach (var item in ViewBag.Brands)
+                                        {
+                                            <label class="form-check mb-2">
+                                                <input class="form-check-input" onclick="brandSet(this)" name="check_opt_a" type="radio" value="@item.ToString()">
+                                                <span class="form-check-label"> @item.ToString() </span>
+                                            </label>
+                                        }
+                                    }
+                                    <input id="brand" asp-for="Brand" hidden />
+                                </div> <!-- card-body.// -->
+                            </div>
+                        </article>  <!-- filter-group // -->
+                        <aside class="filter-group">
+                            <header class="card-header">
+                                <button class="btn btn-light w-100" type="submit">Apply</button>
+                            </header>
+                        </aside>
+                    </form>
+                </div> <!-- card.// -->
+                <!-- ============= COMPONENTS SIDEBAR END .// ============= -->
+            </aside>
+        </div> <!-- row.// -->
+    </div> <!-- container .//  -->
+</section>
+
+@section Scripts{
+<script>
+    function brandSet(data) {
+        document.getElementById('brand').value = data.value;
+    }
+</script>
+<partial name="_AddToCartScriptsPartial" />
+}
