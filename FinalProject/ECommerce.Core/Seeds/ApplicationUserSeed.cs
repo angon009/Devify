@@ -21,7 +21,7 @@ namespace ECommerce.Core.Seeds
                     NormalizedEmail = "ADMIN@ECOMMERCE.COM",
                     LockoutEnabled = true,
                     Gender = "Male",
-                    //PasswordHash = "AQAAAAEAACcQAAAAEASXKSN8PtlyWFR9VGOd71qg3iyB/DOxE6mRQrc7c96j8G3VBTN9aVfVmkM+H19AWQ==",// Riad.00,
+                    //PasswordHash = "AQAAAAEAACcQAAAAEASXKSN8PtlyWFR9VGOd71qg3iyB/DOxE6mRQrc7c96j8G3VBTN9aVfVmkM+H19AWQ==",// Angon.00,
                     SecurityStamp = Guid.NewGuid().ToString(),
                     EmailConfirmed = true,
                     Birthdate = DateTime.Now,
@@ -29,7 +29,7 @@ namespace ECommerce.Core.Seeds
 
                 };
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "Riad.00");
+                var hashed = password.HashPassword(user, "Angon.00");
                 user.PasswordHash = hashed;
                 return new ApplicationUser[]
                 {

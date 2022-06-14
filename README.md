@@ -45,4 +45,4 @@
 ## Login to administration
 http://yourdomain.com/account/login
 * Email: admin@ecommerce.com
-* Pass: Riad.00
+* Pass: Angon.00
